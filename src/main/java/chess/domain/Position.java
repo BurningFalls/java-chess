@@ -15,10 +15,24 @@ public class Position {
     }
 
     public static Position of(String position) {
+        validatePositionForm(position);
+
         int x = position.charAt(0) - 'a' + 1;
         int y = position.charAt(1) - '1' + 1;
 
         return new Position(x, y);
+    }
+
+    public static void validatePositionForm(String position) {
+        if (position.length() != 2) {
+            throw new IllegalArgumentException("좌표는 두 글자 형식이어야 합니다.");
+        }
+        if (position.charAt(0) < 'a' || position.charAt(0) > 'z') {
+            throw new IllegalArgumentException("좌표의 첫 번째 글자는 a~z 사이의 알파벳이어야 합니다.");
+        }
+        if (position.charAt(1) < '1' || position.charAt(1) > '8') {
+            throw new IllegalArgumentException("좌표의 두 번째 글자는 1~8 사이의 숫자여야 합니다.");
+        }
     }
 
     public void validateRange(int x, int y) {

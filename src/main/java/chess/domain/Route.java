@@ -13,7 +13,7 @@ public class Route {
 
     public void validateDifferentPosition(String source, String target) {
         if (source.equals(target)) {
-            throw new IllegalArgumentException("source와 target의 위치는 달라야 합니다.");
+            throw new IllegalArgumentException("출발지와 목적지의 위치는 달라야 합니다.");
         }
     }
 

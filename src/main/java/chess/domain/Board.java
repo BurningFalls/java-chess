@@ -132,8 +132,14 @@ public class Board {
                 .anyMatch(piece -> piece.getType() != PieceType.EMPTY);
     }
 
-    public boolean checkOtherPieceExist(Position position) {
+    public boolean checkPieceExist(Position position) {
         Piece piece = board.get(position);
+
+        return piece.getType() != PieceType.EMPTY;
+    }
+
+    public boolean checkPieceExist(Command command) {
+        Piece piece = board.get(command.getSource());
 
         return piece.getType() != PieceType.EMPTY;
     }
@@ -144,7 +150,11 @@ public class Board {
         return otherPiece.isSameTeam(currentTeam);
     }
 
-    public boolean movePieceAndRenewBoard(Position source, Position target) {
+    // TODO: 로직 분리
+    public boolean movePieceAndRenewBoard(Command command) {
+        Position source = command.getSource();
+        Position target = command.getTarget();
+
         Piece piece = board.get(source);
         Piece movedPiece = movePiece(source, target, piece);
         PieceInfo pieceInfo = movedPiece.getPieceInfo();
@@ -160,12 +170,12 @@ public class Board {
     private Piece movePiece(Position source, Position target, Piece piece) {
         return piece.move(target,
                 checkObstacleInRange(source, target),
-                checkOtherPieceExist(target),
+                checkPieceExist(target),
                 checkSameTeamExist(piece.getTeam(), target));
     }
 
-    public boolean isPieceFromOtherTeam(Position source, Team team) {
-        Piece piece = board.get(source);
+    public boolean isPieceFromOtherTeam(Command command, Team team) {
+        Piece piece = board.get(command.getSource());
         return !piece.isSameTeam(team);
     }
 }
