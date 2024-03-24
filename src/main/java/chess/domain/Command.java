@@ -49,6 +49,16 @@ public class Command {
         return this.commandType == commandType;
     }
 
+    private void checkCommandTypeMoveWhenGetRoute() {
+        if (commandType != MOVE) {
+            throw new IllegalArgumentException("start와 end 커맨드 타입은 경로를 갖지 않습니다.");
+        }
+    }
+
+    public CommandType getCommandType() {
+        return commandType;
+    }
+
     public Position getSource() {
         checkCommandTypeMoveWhenGetRoute();
         return route.getSource();
@@ -57,11 +67,5 @@ public class Command {
     public Position getTarget() {
         checkCommandTypeMoveWhenGetRoute();
         return route.getTarget();
-    }
-
-    private void checkCommandTypeMoveWhenGetRoute() {
-        if (commandType != MOVE) {
-            throw new IllegalArgumentException("start와 end 커맨드 타입은 경로를 갖지 않습니다.");
-        }
     }
 }

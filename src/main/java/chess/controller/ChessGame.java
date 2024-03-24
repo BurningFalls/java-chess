@@ -1,14 +1,11 @@
 package chess.controller;
 
-import static chess.domain.CommandType.END;
-import static chess.domain.CommandType.MOVE;
-import static chess.domain.CommandType.START;
-
 import chess.domain.Board;
 import chess.domain.Command;
+import chess.domain.CommandLogger;
+import chess.domain.CommandType;
 import chess.domain.PieceInfo;
 import chess.domain.Position;
-import chess.domain.Team;
 import chess.domain.dto.BoardDto;
 import chess.domain.piece.Piece;
 import chess.domain.piece.PieceType;
@@ -21,60 +18,41 @@ import java.util.Map;
 
 public class ChessGame {
     private static final int BOARD_SIZE = 8;
-    private static final int INDEX_OFFSET = 1;
     private static final String EMPTY_PIECE = ".";
+    private static final int INDEX_OFFSET = 1;
 
     private final Board board;
+    private final CommandLogger commandLogger;
 
     public ChessGame(Board board) {
         this.board = board;
+        this.commandLogger = new CommandLogger();
     }
 
     public void startGame() {
-        Command command = Command.from(InputView.inputCommand());
-        while (!command.isTypeEqualTo(START) && !command.isTypeEqualTo(END)) {
-            OutputView.printInputAgainMessage();
-            command = Command.from(InputView.inputCommand());
-        }
-        if (command.isTypeEqualTo(START)) {
-            OutputView.printBoard(makeBoardDto(board.getBoard()));
+        while (!commandLogger.isGameEnd()) {
             playGame();
         }
     }
 
     private void playGame() {
-        Team turn = Team.WHITE;
-        while (turn != Team.NONE) {
-            turn = playTurn(turn);
+        try {
+            play();
+        } catch (IllegalArgumentException e) {
+            OutputView.printErrorMessage(e.getMessage());
         }
     }
 
-    private Team playTurn(Team turn) {
+    private void play() {
         Command command = Command.from(InputView.inputCommand());
-        while (!command.isTypeEqualTo(MOVE) && !command.isTypeEqualTo(END)) {
-            OutputView.printInputAgainMessage();
-            command = Command.from(InputView.inputCommand());
-        }
-        if (command.isTypeEqualTo(MOVE)) {
-            return playMoveCommand(command, turn);
-        }
-        return Team.NONE;
-    }
+        commandLogger.addLog(command);
 
-    private Team playMoveCommand(Command command, Team turn) {
-        Position source = command.getSource();
-        Position target = command.getTarget();
-        if (isOppositeTurn(source, turn) || !board.movePieceAndRenewBoard(source, target)) {
-            OutputView.printWrongMovementMessage();
-            return turn;
+        if (command.isTypeEqualTo(CommandType.MOVE)) {
+            board.movePiece(command, commandLogger.whoTurn());
+            commandLogger.changeTurn();
         }
 
         OutputView.printBoard(makeBoardDto(board.getBoard()));
-        return Team.takeTurn(turn);
-    }
-
-    private boolean isOppositeTurn(Position source, Team team) {
-        return board.isPieceFromOtherTeam(source, team);
     }
 
     private BoardDto makeBoardDto(Map<Position, Piece> board) {
@@ -85,8 +63,8 @@ public class ChessGame {
             PieceType pieceType = piece.getType();
             PieceInfo pieceInfo = piece.getPieceInfo();
 
-            rawBoard.get(position.getY() - INDEX_OFFSET)
-                    .set(position.getX() - INDEX_OFFSET, pieceType.getPieceLetter(pieceInfo.getTeam()));
+            rawBoard.get(position.getRankIndex() - INDEX_OFFSET)
+                    .set(position.getFileIndex() - INDEX_OFFSET, pieceType.getPieceLetter(pieceInfo.getTeam()));
         }
         return new BoardDto(rawBoard);
     }

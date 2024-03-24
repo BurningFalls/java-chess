@@ -14,9 +14,9 @@ public class BoardTest {
 
     private static Stream<Arguments> checkPieceMovePossibleParameters() {
         return Stream.of(
-                Arguments.of(Position.of("e4"), Team.NONE, false),
-                Arguments.of(Position.of("d8"), Team.BLACK, false),
-                Arguments.of(Position.of("d8"), Team.WHITE, true)
+                Arguments.of(Position.of("e4"), Team.NONE, true),
+                Arguments.of(Position.of("d8"), Team.BLACK, true),
+                Arguments.of(Position.of("d8"), Team.WHITE, false)
         );
     }
 
@@ -34,7 +34,7 @@ public class BoardTest {
         board.placePiece(currentPosition, rook);
         board.placePiece(obstaclePosition, obstacleRook);
 
-        boolean actualExistObstacle = board.checkObstacleInRange(currentPosition, newPosition);
+        boolean actualExistObstacle = board.isObstacleInRange(currentPosition, newPosition);
 
         Assertions.assertThat(actualExistObstacle).isEqualTo(true);
     }
@@ -53,7 +53,7 @@ public class BoardTest {
         board.placePiece(currentPosition, rook);
         board.placePiece(otherPosition, otherRook);
 
-        boolean actualPieceMovePossible = board.checkSameTeamExist(currentTeam, otherPosition);
+        boolean actualPieceMovePossible = !board.isPieceFromSameTeam(otherPosition, currentTeam);
 
         Assertions.assertThat(actualPieceMovePossible).isEqualTo(expectedPieceMovePossible);
     }
