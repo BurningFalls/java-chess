@@ -16,8 +16,18 @@ public abstract class ChessPiece implements Piece {
     }
 
     @Override
-    public abstract ChessPiece move(Position newPosition, boolean isObstacleInRange, boolean isOtherPieceExist,
-                                    boolean isSameTeamExist);
+    public ChessPiece move(Position newPosition, boolean isObstacleInRange, boolean isOtherPieceExist,
+                                    boolean isSameTeamExist) {
+        if (isMoveInvalid(newPosition, isObstacleInRange, isOtherPieceExist, isSameTeamExist)) {
+            return this;
+        }
+
+        PieceInfo newPieceInfo = pieceInfo.renewPosition(newPosition);
+        return createNewPiece(newPieceInfo);
+    }
+
+    @Override
+    public abstract ChessPiece createNewPiece(PieceInfo newPieceInfo);
 
     @Override
     public abstract boolean isMoveInvalid(Position newPosition, boolean isDisturbed, boolean isOtherPieceExist,

@@ -7,6 +7,8 @@ import chess.domain.Team;
 public interface Piece {
     Piece move(Position newPosition, boolean isDisturbed, boolean isOtherPieceExist, boolean isSameTeamExist);
 
+    ChessPiece createNewPiece(PieceInfo newPieceInfo);
+
     boolean isMoveInvalid(Position newPosition, boolean isDisturbed, boolean isOtherPieceExist, boolean isSameTeam);
 
     PieceType getType();

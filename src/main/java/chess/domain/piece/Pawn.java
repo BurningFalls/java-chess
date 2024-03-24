@@ -16,19 +16,8 @@ public class Pawn extends ChessPiece {
     }
 
     @Override
-    public ChessPiece move(Position newPosition, boolean isObstacleInRange, boolean isOtherPieceExist,
-                           boolean isSameTeamExist) {
-        if (isMoveInvalid(newPosition, isObstacleInRange, isOtherPieceExist, isSameTeamExist)) {
-            return this;
-        }
-
-        PieceInfo newPieceInfo = pieceInfo.renewPosition(newPosition);
+    public ChessPiece createNewPiece(PieceInfo newPieceInfo) {
         return new Pawn(newPieceInfo, changeMovedStrategy());
-    }
-
-    @Override
-    public PieceType getType() {
-        return PieceType.PAWN;
     }
 
     @Override
@@ -54,5 +43,10 @@ public class Pawn extends ChessPiece {
             return whitePawnNotFirstMoveStrategy;
         }
         return blackPawnNotFirstMoveStrategy;
+    }
+
+    @Override
+    public PieceType getType() {
+        return PieceType.PAWN;
     }
 }

@@ -11,8 +11,7 @@ public class EmptyPiece extends ChessPiece {
     }
 
     @Override
-    public ChessPiece move(Position newPosition, boolean isObstacleInRange, boolean isOtherPieceExist,
-                           boolean isSameTeamExist) {
+    public ChessPiece createNewPiece(PieceInfo newPieceInfo) {
         return this;
     }
 

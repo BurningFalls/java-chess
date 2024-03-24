@@ -11,19 +11,8 @@ public class Rook extends ChessPiece {
     }
 
     @Override
-    public ChessPiece move(Position newPosition, boolean isObstacleInRange, boolean isOtherPieceExist,
-                           boolean isSameTeamExist) {
-        if (isMoveInvalid(newPosition, isObstacleInRange, isOtherPieceExist, isSameTeamExist)) {
-            return this;
-        }
-
-        PieceInfo newPieceInfo = pieceInfo.renewPosition(newPosition);
+    public ChessPiece createNewPiece(PieceInfo newPieceInfo) {
         return new Rook(newPieceInfo, moveStrategy);
-    }
-
-    @Override
-    public PieceType getType() {
-        return PieceType.ROOK;
     }
 
     @Override
@@ -37,5 +26,10 @@ public class Rook extends ChessPiece {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public PieceType getType() {
+        return PieceType.ROOK;
     }
 }
