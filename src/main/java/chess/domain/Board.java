@@ -23,8 +23,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+// TODO: 보드 초기화 로직 분리
 public class Board {
     private static final int BOARD_SIZE = 8;
+    private static final MoveStrategy EMPTY_MOVE_STRATEGY = new EmptyMoveStrategy();
 
     private final Map<Position, Piece> board;
 
@@ -150,32 +152,38 @@ public class Board {
         return otherPiece.isSameTeam(currentTeam);
     }
 
-    // TODO: 로직 분리
-    public boolean movePieceAndRenewBoard(Command command) {
-        Position source = command.getSource();
-        Position target = command.getTarget();
+    public boolean isPieceFromOtherTeam(Command command, Team team) {
+        Piece piece = board.get(command.getSource());
 
-        Piece piece = board.get(source);
-        Piece movedPiece = movePiece(source, target, piece);
-        PieceInfo pieceInfo = movedPiece.getPieceInfo();
-
-        if (pieceInfo.isDifferentPosition(target)) {
-            return false;
-        }
-        board.put(source, new EmptyPiece(new PieceInfo(source, Team.NONE), new EmptyMoveStrategy()));
-        board.put(pieceInfo.getPosition(), movedPiece);
-        return true;
+        return !piece.isSameTeam(team);
     }
 
-    private Piece movePiece(Position source, Position target, Piece piece) {
+    public void movePieceAndRenewBoard(Command command) {
+        Piece piece = board.get(command.getSource());
+        Piece movedPiece = movePiece(piece, command.getSource(), command.getTarget());
+
+        validateMoveSuccess(piece, movedPiece);
+
+        renewBoard(movedPiece, command.getSource(), command.getTarget());
+    }
+
+    private Piece movePiece(Piece piece, Position source, Position target) {
         return piece.move(target,
                 checkObstacleInRange(source, target),
                 checkPieceExist(target),
                 checkSameTeamExist(piece.getTeam(), target));
     }
 
-    public boolean isPieceFromOtherTeam(Command command, Team team) {
-        Piece piece = board.get(command.getSource());
-        return !piece.isSameTeam(team);
+    private void validateMoveSuccess(Piece piece, Piece movedPiece) {
+        if (piece.equals(movedPiece)) {
+            throw new IllegalArgumentException("목적지로 체스 말을 이동시킬 수 없습니다.");
+        }
+    }
+
+    private void renewBoard(Piece movedPiece, Position source, Position target) {
+        Piece emptyPiece = new EmptyPiece(new PieceInfo(source, Team.NONE), EMPTY_MOVE_STRATEGY);
+
+        board.put(source, emptyPiece);
+        board.put(target, movedPiece);
     }
 }

@@ -58,25 +58,19 @@ public class ChessGame {
     private void movePiece(Command command) {
         validatePieceExist(command);
         validateMyTurn(command);
-        validateMoveSuccess(command);
+
+        board.movePieceAndRenewBoard(command);
     }
 
     private void validatePieceExist(Command command) {
         if (!board.checkPieceExist(command)) {
-            throw new IllegalArgumentException("출발지에 말이 없습니다.");
+            throw new IllegalArgumentException("출발지에 체스 말이 없습니다.");
         }
     }
 
     private void validateMyTurn(Command command) {
         if (board.isPieceFromOtherTeam(command, commandLogger.whoTurn())) {
             throw new IllegalArgumentException("상대 턴입니다.");
-        }
-    }
-
-    // TODO: 움직이는 로직과 움직임이 성공했는지 로직 분리
-    private void validateMoveSuccess(Command command) {
-        if (!board.movePieceAndRenewBoard(command)) {
-            throw new IllegalArgumentException("목적지로 말을 이동시킬 수 없습니다.");
         }
     }
 
