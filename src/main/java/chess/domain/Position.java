@@ -5,72 +5,61 @@ import java.util.List;
 import java.util.Objects;
 
 public class Position {
-    private final int x;
-    private final int y;
+    private static final int FILE_POSITION = 0;
+    private static final int RANK_POSITION = 1;
 
-    private Position(int x, int y) {
-        validateRange(x, y);
-        this.x = x;
-        this.y = y;
+    private final File file;
+    private final Rank rank;
+
+    private Position(File file, Rank rank) {
+        this.file = file;
+        this.rank = rank;
     }
 
     public static Position of(String position) {
         validatePositionForm(position);
 
-        int x = position.charAt(0) - 'a' + 1;
-        int y = position.charAt(1) - '1' + 1;
+        File file = File.getFile(String.valueOf(position.charAt(FILE_POSITION)));
+        Rank rank = Rank.getRank(String.valueOf(position.charAt(RANK_POSITION)));
 
-        return new Position(x, y);
+        return new Position(file, rank);
     }
 
     public static void validatePositionForm(String position) {
         if (position.length() != 2) {
             throw new IllegalArgumentException("좌표는 두 글자 형식이어야 합니다.");
         }
-        if (position.charAt(0) < 'a' || position.charAt(0) > 'z') {
-            throw new IllegalArgumentException("좌표의 첫 번째 글자는 a~z 사이의 알파벳이어야 합니다.");
-        }
-        if (position.charAt(1) < '1' || position.charAt(1) > '8') {
-            throw new IllegalArgumentException("좌표의 두 번째 글자는 1~8 사이의 숫자여야 합니다.");
-        }
-    }
-
-    public void validateRange(int x, int y) {
-        if (isNotInRange(x) || isNotInRange(y)) {
-            throw new IllegalArgumentException("보드의 범위를 벗어난 좌표입니다.");
-        }
-    }
-
-    private boolean isNotInRange(int coordinate) {
-        return coordinate < 1 || coordinate > 8;
     }
 
     public PositionDifference calculateDifference(Position otherPosition) {
-        int xDifference = this.x - otherPosition.x;
-        int yDifference = this.y - otherPosition.y;
+        int xDifference = this.file.getIndex() - otherPosition.file.getIndex();
+        int yDifference = this.rank.getIndex() - otherPosition.rank.getIndex();
 
         return new PositionDifference(xDifference, yDifference);
     }
 
     public List<Position> getInternalPositions(Position otherPosition) {
         List<Position> internalPositions = new ArrayList<>();
-        int deltaX = otherPosition.x - this.x;
-        int deltaY = otherPosition.y - this.y;
+        int deltaX = otherPosition.file.getIndex() - this.file.getIndex();
+        int deltaY = otherPosition.rank.getIndex() - this.rank.getIndex();
         int max = Math.max(Math.abs(deltaX), Math.abs(deltaY));
 
         for (int step = 1; step < max; step++) {
-            internalPositions.add(new Position(this.x + (deltaX / max) * step, this.y + (deltaY / max) * step));
+            int changedX = this.file.getIndex() + (deltaX / max) * step;
+            int changedY = this.rank.getIndex() + (deltaY / max) * step;
+
+            internalPositions.add(new Position(File.getFile(changedX), Rank.getRank(changedY)));
         }
 
         return internalPositions;
     }
 
-    public int getX() {
-        return x;
+    public int getFileIndex() {
+        return file.getIndex();
     }
 
-    public int getY() {
-        return y;
+    public int getRankIndex() {
+        return rank.getIndex();
     }
 
     @Override
@@ -82,11 +71,11 @@ public class Position {
             return false;
         }
         Position position = (Position) o;
-        return x == position.x && y == position.y;
+        return file == position.file && rank == position.rank;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(x, y);
+        return Objects.hash(file, rank);
     }
 }

@@ -63,8 +63,8 @@ public class ChessGame {
             PieceType pieceType = piece.getType();
             PieceInfo pieceInfo = piece.getPieceInfo();
 
-            rawBoard.get(position.getY() - INDEX_OFFSET)
-                    .set(position.getX() - INDEX_OFFSET, pieceType.getPieceLetter(pieceInfo.getTeam()));
+            rawBoard.get(position.getRankIndex() - INDEX_OFFSET)
+                    .set(position.getFileIndex() - INDEX_OFFSET, pieceType.getPieceLetter(pieceInfo.getTeam()));
         }
         return new BoardDto(rawBoard);
     }
