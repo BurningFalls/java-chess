@@ -38,7 +38,7 @@ public class Pawn extends ChessPiece {
         int diffX = Math.abs(currentPosition.getFileIndex() - newPosition.getFileIndex());
 
         boolean isInvalidVerticalMove = (diffX == 0) && isOtherPieceExist;
-        boolean isInvalidDiagonalMove = (diffX == 1) && (!isOtherPieceExist || isSameTeam);
+        boolean isInvalidDiagonalMove = (diffX == 1) && (!isOtherPieceExist || isSameTeamExist);
 
         if (!moveStrategy.canMove(currentPosition, newPosition)) {
             return true;
