@@ -17,8 +17,8 @@ public class Pawn extends ChessPiece {
 
     @Override
     public ChessPiece move(Position newPosition, boolean isObstacleInRange, boolean isOtherPieceExist,
-                           boolean isSameTeam) {
-        if (isMoveInvalid(newPosition, isObstacleInRange, isOtherPieceExist, isSameTeam)) {
+                           boolean isSameTeamExist) {
+        if (isMoveInvalid(newPosition, isObstacleInRange, isOtherPieceExist, isSameTeamExist)) {
             return this;
         }
 
@@ -33,7 +33,7 @@ public class Pawn extends ChessPiece {
 
     @Override
     public boolean isMoveInvalid(Position newPosition, boolean isDisturbed, boolean isOtherPieceExist,
-                                 boolean isSameTeam) {
+                                 boolean isSameTeamExist) {
         Position currentPosition = pieceInfo.getPosition();
         int diffX = Math.abs(currentPosition.getFileIndex() - newPosition.getFileIndex());
 
