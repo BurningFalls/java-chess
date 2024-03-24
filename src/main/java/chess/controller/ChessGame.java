@@ -48,30 +48,11 @@ public class ChessGame {
         commandLogger.addLog(command);
 
         if (command.isTypeEqualTo(CommandType.MOVE)) {
-            movePiece(command);
+            board.movePiece(command, commandLogger.whoTurn());
             commandLogger.changeTurn();
         }
 
         OutputView.printBoard(makeBoardDto(board.getBoard()));
-    }
-
-    private void movePiece(Command command) {
-        validatePieceExist(command);
-        validateMyTurn(command);
-
-        board.movePieceAndRenewBoard(command);
-    }
-
-    private void validatePieceExist(Command command) {
-        if (!board.checkPieceExist(command)) {
-            throw new IllegalArgumentException("출발지에 체스 말이 없습니다.");
-        }
-    }
-
-    private void validateMyTurn(Command command) {
-        if (board.isPieceFromOtherTeam(command, commandLogger.whoTurn())) {
-            throw new IllegalArgumentException("상대 턴입니다.");
-        }
     }
 
     private BoardDto makeBoardDto(Map<Position, Piece> board) {
