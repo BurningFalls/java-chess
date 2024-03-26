@@ -30,7 +30,7 @@ public class ChessGame {
     }
 
     public void startGame() {
-        while (!commandLogger.isGameEnd()) {
+        while (!commandLogger.isCommandEnd()) {
             playGame();
         }
     }

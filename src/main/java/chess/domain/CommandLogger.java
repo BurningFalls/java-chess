@@ -49,7 +49,7 @@ public class CommandLogger {
         turn = takeTurn(turn);
     }
 
-    public boolean isGameEnd() {
+    public boolean isCommandEnd() {
         if (commandLog.isEmpty()) {
             return false;
         }
