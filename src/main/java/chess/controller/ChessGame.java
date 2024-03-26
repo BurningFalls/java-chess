@@ -4,11 +4,11 @@ import chess.domain.board.Board;
 import chess.domain.command.Command;
 import chess.domain.command.CommandLogger;
 import chess.domain.command.CommandType;
-import chess.domain.pieceinfo.PieceInfo;
-import chess.domain.pieceinfo.Position;
 import chess.domain.dto.BoardDto;
 import chess.domain.piece.Piece;
 import chess.domain.piece.PieceType;
+import chess.domain.pieceinfo.PieceInfo;
+import chess.domain.pieceinfo.Position;
 import chess.view.InputView;
 import chess.view.OutputView;
 import java.util.ArrayList;
@@ -50,6 +50,8 @@ public class ChessGame {
         if (command.isTypeEqualTo(CommandType.MOVE)) {
             board.movePiece(command, commandLogger.whoTurn());
             commandLogger.changeTurn();
+        } else if (command.isTypeEqualTo(CommandType.STATUS)) {
+            // ...
         }
 
         OutputView.printBoard(makeBoardDto(board.getBoard()));

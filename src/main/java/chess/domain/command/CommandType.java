@@ -5,6 +5,7 @@ import java.util.Arrays;
 public enum CommandType {
     START("start"),
     MOVE("move"),
+    STATUS("status"),
     END("end");
 
     private final String commandType;
@@ -21,6 +22,6 @@ public enum CommandType {
         return Arrays.stream(CommandType.values())
                 .filter(value -> value.get().equals(command))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("커맨드 타입은 start, end, move 중 하나여야 합니다."));
+                .orElseThrow(() -> new IllegalArgumentException("커맨드 타입은 start, move, status, end 중 하나여야 합니다."));
     }
 }
