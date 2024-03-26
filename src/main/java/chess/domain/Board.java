@@ -17,10 +17,6 @@ public class Board {
         this.board = BoardInitializer.initialize();
     }
 
-    public void placePiece(Position currentPosition, Piece piece) {
-        board.put(currentPosition, piece);
-    }
-
     public void movePiece(Command command, Team turn) {
         Position source = command.getSource();
         Position target = command.getTarget();
@@ -32,18 +28,6 @@ public class Board {
         validateMoveSuccess(piece, movedPiece);
 
         renewBoard(movedPiece, source, target);
-    }
-
-    public boolean isPieceExistInPosition(Position position) {
-        Piece piece = board.get(position);
-
-        return piece.getType() != PieceType.EMPTY;
-    }
-
-    public boolean isPieceFromSameTeam(Position position, Team team) {
-        Piece piece = board.get(position);
-
-        return piece.isSameTeam(team);
     }
 
     private void validatePieceExist(Position position) {
@@ -78,12 +62,24 @@ public class Board {
                 isPieceFromSameTeam(target, piece.getTeam()));
     }
 
-    public boolean isObstacleInRange(Position currentPosition, Position newPosition) {
+    private boolean isObstacleInRange(Position currentPosition, Position newPosition) {
         List<Position> internalPositions = currentPosition.getInternalPositions(newPosition);
 
         return internalPositions.stream()
                 .map(board::get)
                 .anyMatch(piece -> piece.getType() != PieceType.EMPTY);
+    }
+
+    private boolean isPieceExistInPosition(Position position) {
+        Piece piece = board.get(position);
+
+        return piece.getType() != PieceType.EMPTY;
+    }
+
+    private boolean isPieceFromSameTeam(Position position, Team team) {
+        Piece piece = board.get(position);
+
+        return piece.isSameTeam(team);
     }
 
     public Map<Position, Piece> getBoard() {
