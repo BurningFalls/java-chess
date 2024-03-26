@@ -27,10 +27,7 @@ public class Pawn extends ChessPiece {
         if (!moveStrategy.canMove(currentPosition, newPosition)) {
             return true;
         }
-        if (isDisturbed || isInvalidVerticalMove || isInvalidDiagonalMove) {
-            return true;
-        }
-        return false;
+        return isDisturbed || isInvalidVerticalMove || isInvalidDiagonalMove;
     }
 
     @Override

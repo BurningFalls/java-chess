@@ -17,7 +17,7 @@ public abstract class ChessPiece implements Piece {
 
     @Override
     public ChessPiece move(Position newPosition, boolean isObstacleInRange, boolean isOtherPieceExist,
-                                    boolean isSameTeamExist) {
+                           boolean isSameTeamExist) {
         if (isMoveInvalid(newPosition, isObstacleInRange, isOtherPieceExist, isSameTeamExist)) {
             return this;
         }
@@ -33,10 +33,7 @@ public abstract class ChessPiece implements Piece {
         if (!moveStrategy.canMove(currentPosition, newPosition)) {
             return true;
         }
-        if (isDisturbed || isSameTeamExist) {
-            return true;
-        }
-        return false;
+        return isDisturbed || isSameTeamExist;
     }
 
     @Override
