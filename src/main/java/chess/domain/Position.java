@@ -39,18 +39,23 @@ public class Position {
     }
 
     public List<Position> getInternalPositions(Position otherPosition) {
-        List<Position> internalPositions = new ArrayList<>();
         int deltaX = otherPosition.file.getIndex() - this.file.getIndex();
         int deltaY = otherPosition.rank.getIndex() - this.rank.getIndex();
         int max = Math.max(Math.abs(deltaX), Math.abs(deltaY));
 
+        return findInternalPositions(max, deltaX, deltaY);
+    }
+
+    private List<Position> findInternalPositions(int max, int deltaX, int deltaY) {
+        List<Position> internalPositions = new ArrayList<>();
         for (int step = 1; step < max; step++) {
+            if ((deltaX * step) % max != 0 || (deltaY * step) % max != 0) {
+                continue;
+            }
             int changedX = this.file.getIndex() + (deltaX / max) * step;
             int changedY = this.rank.getIndex() + (deltaY / max) * step;
-
             internalPositions.add(new Position(File.getFile(changedX), Rank.getRank(changedY)));
         }
-
         return internalPositions;
     }
 

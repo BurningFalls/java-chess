@@ -22,7 +22,7 @@ public class Knight extends ChessPiece {
         if (!moveStrategy.canMove(currentPosition, newPosition)) {
             return true;
         }
-        if (isSameTeamExist) {
+        if (isDisturbed || isSameTeamExist) {
             return true;
         }
         return false;
