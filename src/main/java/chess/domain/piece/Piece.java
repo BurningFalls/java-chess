@@ -20,4 +20,6 @@ public interface Piece {
     boolean isSameTeam(Team otherTeam);
 
     Position getPosition();
+
+    double getScore();
 }

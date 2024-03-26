@@ -1,6 +1,8 @@
 package chess.domain.board;
 
-import chess.domain.DeadPieces;
+import static chess.domain.board.File.A;
+import static chess.domain.board.File.H;
+
 import chess.domain.command.Command;
 import chess.domain.piece.EmptyPiece;
 import chess.domain.piece.Piece;
@@ -41,6 +43,23 @@ public class Board {
 
     public boolean isKingDead() {
         return deadPieces.isContainKing();
+    }
+
+    public double calculatePiecesScoreSum(Team team) {
+        double piecesScoreSum = 0.0;
+        for (int fileIndex = A.getIndex(); fileIndex <= H.getIndex(); fileIndex++) {
+            LivePiecesInFile livePiecesInFile = new LivePiecesInFile(getPiecesInFile(fileIndex));
+            piecesScoreSum += livePiecesInFile.calculatePieceScoreSum(team);
+        }
+
+        return piecesScoreSum;
+    }
+
+    private List<Piece> getPiecesInFile(int fileIndex) {
+        return board.entrySet().stream()
+                .filter(entry -> entry.getKey().getFileIndex() == fileIndex)
+                .map(Map.Entry::getValue)
+                .toList();
     }
 
     private void validatePieceExist(Position position) {

@@ -32,4 +32,18 @@ public class OutputView {
     public static void printErrorMessage(String errorMessage) {
         System.out.printf("[ERORR] %s%n", errorMessage);
     }
+
+    public static void printScoreSum(double blackPiecesScoreSum, double whitePiecesScoreSum) {
+        System.out.printf("%nBLACK 팀 점수: %.1f%n" + "WHITE 팀 점수: %.1f%n", blackPiecesScoreSum, whitePiecesScoreSum);
+    }
+
+    public static void printWinnerTeam(double blackPiecesScoreSum, double whitePiecesScoreSum) {
+        if (blackPiecesScoreSum > whitePiecesScoreSum) {
+            System.out.printf("이긴 진영: %s%n", "BLACK 팀");
+        } else if (blackPiecesScoreSum < whitePiecesScoreSum) {
+            System.out.printf("이긴 진영: %s%n", "WHITE 팀");
+        } else if (blackPiecesScoreSum == whitePiecesScoreSum) {
+            System.out.printf("BLACK 팀과 WHITE 팀의 점수가 같습니다.%n");
+        }
+    }
 }

@@ -9,6 +9,7 @@ import chess.domain.piece.Piece;
 import chess.domain.piece.PieceType;
 import chess.domain.pieceinfo.PieceInfo;
 import chess.domain.pieceinfo.Position;
+import chess.domain.pieceinfo.Team;
 import chess.view.InputView;
 import chess.view.OutputView;
 import java.util.ArrayList;
@@ -48,13 +49,24 @@ public class ChessGame {
         commandLogger.addLog(command);
 
         if (command.isTypeEqualTo(CommandType.MOVE)) {
-            board.movePiece(command, commandLogger.whoTurn());
-            commandLogger.changeTurn();
+            processMoveCommand(command);
         } else if (command.isTypeEqualTo(CommandType.STATUS)) {
-            // ...
+            processStatusCommand();
         }
 
         OutputView.printBoard(makeBoardDto(board.getBoard()));
+    }
+
+    private void processMoveCommand(Command command) {
+        board.movePiece(command, commandLogger.whoTurn());
+        commandLogger.changeTurn();
+    }
+
+    private void processStatusCommand() {
+        double blackPiecesScoreSum = board.calculatePiecesScoreSum(Team.BLACK);
+        double whitePiecesScoreSum = board.calculatePiecesScoreSum(Team.WHITE);
+        OutputView.printScoreSum(blackPiecesScoreSum, whitePiecesScoreSum);
+        OutputView.printWinnerTeam(blackPiecesScoreSum, whitePiecesScoreSum);
     }
 
     private BoardDto makeBoardDto(Map<Position, Piece> board) {

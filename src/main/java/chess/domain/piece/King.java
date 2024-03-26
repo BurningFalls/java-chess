@@ -18,4 +18,9 @@ public class King extends ChessPiece {
     public PieceType getType() {
         return PieceType.KING;
     }
+
+    @Override
+    public double getScore() {
+        return 0;
+    }
 }

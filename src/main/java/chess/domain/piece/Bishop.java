@@ -1,5 +1,7 @@
 package chess.domain.piece;
 
+import static chess.domain.pieceinfo.PieceScore.BISHOP_SCORE;
+
 import chess.domain.pieceinfo.PieceInfo;
 import chess.domain.strategy.MoveStrategy;
 
@@ -17,5 +19,10 @@ public class Bishop extends ChessPiece {
     @Override
     public PieceType getType() {
         return PieceType.BISHOP;
+    }
+
+    @Override
+    public double getScore() {
+        return BISHOP_SCORE.get();
     }
 }

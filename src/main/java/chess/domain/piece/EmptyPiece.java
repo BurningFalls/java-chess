@@ -25,4 +25,9 @@ public class EmptyPiece extends ChessPiece {
     public PieceType getType() {
         return PieceType.EMPTY;
     }
+
+    @Override
+    public double getScore() {
+        return 0;
+    }
 }

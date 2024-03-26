@@ -22,6 +22,9 @@ public abstract class ChessPiece implements Piece {
     public abstract PieceType getType();
 
     @Override
+    public abstract double getScore();
+
+    @Override
     public ChessPiece move(Position newPosition, boolean isObstacleInRange, boolean isOtherPieceExist,
                            boolean isSameTeamExist) {
         if (isMoveInvalid(newPosition, isObstacleInRange, isOtherPieceExist, isSameTeamExist)) {

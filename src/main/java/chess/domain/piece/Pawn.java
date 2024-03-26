@@ -1,5 +1,7 @@
 package chess.domain.piece;
 
+import static chess.domain.pieceinfo.PieceScore.PAWN_SCORE;
+
 import chess.domain.pieceinfo.PieceInfo;
 import chess.domain.pieceinfo.Position;
 import chess.domain.pieceinfo.Team;
@@ -45,5 +47,10 @@ public class Pawn extends ChessPiece {
     @Override
     public PieceType getType() {
         return PieceType.PAWN;
+    }
+
+    @Override
+    public double getScore() {
+        return PAWN_SCORE.get();
     }
 }
