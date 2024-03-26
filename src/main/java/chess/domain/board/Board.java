@@ -1,12 +1,13 @@
 package chess.domain.board;
 
+import chess.domain.DeadPieces;
 import chess.domain.command.Command;
-import chess.domain.pieceinfo.PieceInfo;
-import chess.domain.pieceinfo.Position;
-import chess.domain.pieceinfo.Team;
 import chess.domain.piece.EmptyPiece;
 import chess.domain.piece.Piece;
 import chess.domain.piece.PieceType;
+import chess.domain.pieceinfo.PieceInfo;
+import chess.domain.pieceinfo.Position;
+import chess.domain.pieceinfo.Team;
 import chess.domain.strategy.EmptyMoveStrategy;
 import chess.domain.strategy.MoveStrategy;
 import java.util.List;
@@ -16,9 +17,11 @@ public class Board {
     private static final MoveStrategy EMPTY_MOVE_STRATEGY = new EmptyMoveStrategy();
 
     private final Map<Position, Piece> board;
+    private final DeadPieces deadPieces;
 
     public Board() {
         this.board = BoardInitializer.initialize();
+        this.deadPieces = new DeadPieces();
     }
 
     public void movePiece(Command command, Team turn) {
@@ -28,10 +31,16 @@ public class Board {
         validateMyTurn(source, turn);
 
         Piece piece = board.get(source);
+        Piece removedPiece = board.get(target);
         Piece movedPiece = movePiece(piece, source, target);
         validateMoveSuccess(piece, movedPiece);
+        deadPieces.addPiece(removedPiece);
 
         renewBoard(movedPiece, source, target);
+    }
+
+    public boolean isKingDead() {
+        return deadPieces.isContainKing();
     }
 
     private void validatePieceExist(Position position) {
