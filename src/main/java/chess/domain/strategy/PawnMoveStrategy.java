@@ -1,6 +1,5 @@
 package chess.domain.strategy;
 
-import chess.domain.pieceinfo.MoveRange;
 import chess.domain.pieceinfo.Position;
 import chess.domain.pieceinfo.PositionDifference;
 
