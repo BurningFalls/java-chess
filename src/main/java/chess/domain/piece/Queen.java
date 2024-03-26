@@ -1,7 +1,6 @@
 package chess.domain.piece;
 
 import chess.domain.PieceInfo;
-import chess.domain.Position;
 import chess.domain.strategy.MoveStrategy;
 
 public class Queen extends ChessPiece {
