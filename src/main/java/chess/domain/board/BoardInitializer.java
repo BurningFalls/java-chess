@@ -1,5 +1,8 @@
-package chess.domain;
+package chess.domain.board;
 
+import chess.domain.pieceinfo.PieceInfo;
+import chess.domain.pieceinfo.Position;
+import chess.domain.pieceinfo.Team;
 import chess.domain.piece.Bishop;
 import chess.domain.piece.EmptyPiece;
 import chess.domain.piece.King;

@@ -1,4 +1,4 @@
-package chess.domain;
+package chess.domain.pieceinfo;
 
 import java.util.List;
 import java.util.stream.Stream;

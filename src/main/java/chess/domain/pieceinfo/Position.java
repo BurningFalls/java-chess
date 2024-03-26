@@ -1,5 +1,7 @@
-package chess.domain;
+package chess.domain.pieceinfo;
 
+import chess.domain.board.File;
+import chess.domain.board.Rank;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

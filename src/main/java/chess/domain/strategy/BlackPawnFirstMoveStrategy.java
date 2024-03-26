@@ -1,6 +1,6 @@
 package chess.domain.strategy;
 
-import chess.domain.MoveRange;
+import chess.domain.pieceinfo.MoveRange;
 
 public class BlackPawnFirstMoveStrategy extends PawnMoveStrategy {
     private static final MoveRange STRAIGHT_MOVE_RANGE = new MoveRange(1, 2);

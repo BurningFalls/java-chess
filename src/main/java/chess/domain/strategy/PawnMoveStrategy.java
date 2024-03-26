@@ -1,8 +1,8 @@
 package chess.domain.strategy;
 
-import chess.domain.MoveRange;
-import chess.domain.Position;
-import chess.domain.PositionDifference;
+import chess.domain.pieceinfo.MoveRange;
+import chess.domain.pieceinfo.Position;
+import chess.domain.pieceinfo.PositionDifference;
 
 public abstract class PawnMoveStrategy implements MoveStrategy {
     protected final MoveRange straightMoveRange;

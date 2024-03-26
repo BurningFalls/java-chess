@@ -1,4 +1,4 @@
-package chess.domain;
+package chess.domain.pieceinfo;
 
 public record MoveRange(int start, int end) {
 }

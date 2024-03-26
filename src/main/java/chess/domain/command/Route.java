@@ -1,4 +1,6 @@
-package chess.domain;
+package chess.domain.command;
+
+import chess.domain.pieceinfo.Position;
 
 public class Route {
     private final Position source;

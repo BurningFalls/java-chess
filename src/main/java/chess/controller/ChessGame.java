@@ -1,11 +1,11 @@
 package chess.controller;
 
-import chess.domain.Board;
-import chess.domain.Command;
-import chess.domain.CommandLogger;
-import chess.domain.CommandType;
-import chess.domain.PieceInfo;
-import chess.domain.Position;
+import chess.domain.board.Board;
+import chess.domain.command.Command;
+import chess.domain.command.CommandLogger;
+import chess.domain.command.CommandType;
+import chess.domain.pieceinfo.PieceInfo;
+import chess.domain.pieceinfo.Position;
 import chess.domain.dto.BoardDto;
 import chess.domain.piece.Piece;
 import chess.domain.piece.PieceType;

@@ -1,8 +1,8 @@
 package chess.domain.piece;
 
-import chess.domain.PieceInfo;
-import chess.domain.Position;
-import chess.domain.Team;
+import chess.domain.pieceinfo.PieceInfo;
+import chess.domain.pieceinfo.Position;
+import chess.domain.pieceinfo.Team;
 
 public interface Piece {
     Piece move(Position newPosition, boolean isDisturbed, boolean isOtherPieceExist, boolean isSameTeamExist);

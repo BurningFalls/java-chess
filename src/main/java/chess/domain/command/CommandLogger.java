@@ -1,10 +1,11 @@
-package chess.domain;
+package chess.domain.command;
 
-import static chess.domain.CommandType.END;
-import static chess.domain.CommandType.START;
-import static chess.domain.Team.WHITE;
-import static chess.domain.Team.takeTurn;
+import static chess.domain.command.CommandType.END;
+import static chess.domain.command.CommandType.START;
+import static chess.domain.pieceinfo.Team.WHITE;
+import static chess.domain.pieceinfo.Team.takeTurn;
 
+import chess.domain.pieceinfo.Team;
 import java.util.ArrayList;
 import java.util.List;
 

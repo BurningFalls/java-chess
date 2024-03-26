@@ -1,7 +1,8 @@
-package chess.domain;
+package chess.domain.command;
 
-import static chess.domain.CommandType.MOVE;
+import static chess.domain.command.CommandType.MOVE;
 
+import chess.domain.pieceinfo.Position;
 import java.util.List;
 
 public class Command {

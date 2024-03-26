@@ -1,6 +1,6 @@
 package chess.domain.piece;
 
-import chess.domain.Team;
+import chess.domain.pieceinfo.Team;
 
 public enum PieceType {
     PAWN("p"),

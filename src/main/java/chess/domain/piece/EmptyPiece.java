@@ -1,7 +1,7 @@
 package chess.domain.piece;
 
-import chess.domain.PieceInfo;
-import chess.domain.Position;
+import chess.domain.pieceinfo.PieceInfo;
+import chess.domain.pieceinfo.Position;
 import chess.domain.strategy.MoveStrategy;
 
 public class EmptyPiece extends ChessPiece {
