@@ -16,6 +16,12 @@ public abstract class ChessPiece implements Piece {
     }
 
     @Override
+    public abstract ChessPiece createNewPiece(PieceInfo newPieceInfo);
+
+    @Override
+    public abstract PieceType getType();
+
+    @Override
     public ChessPiece move(Position newPosition, boolean isObstacleInRange, boolean isOtherPieceExist,
                            boolean isSameTeamExist) {
         if (isMoveInvalid(newPosition, isObstacleInRange, isOtherPieceExist, isSameTeamExist)) {
@@ -35,12 +41,6 @@ public abstract class ChessPiece implements Piece {
         }
         return isDisturbed || isSameTeamExist;
     }
-
-    @Override
-    public abstract ChessPiece createNewPiece(PieceInfo newPieceInfo);
-
-    @Override
-    public abstract PieceType getType();
 
     @Override
     public PieceInfo getPieceInfo() {
