@@ -16,11 +16,6 @@ public class Pawn extends ChessPiece {
     }
 
     @Override
-    public ChessPiece createNewPiece(PieceInfo newPieceInfo) {
-        return new Pawn(newPieceInfo, changeMovedStrategy());
-    }
-
-    @Override
     public boolean isMoveInvalid(Position newPosition, boolean isDisturbed, boolean isOtherPieceExist,
                                  boolean isSameTeamExist) {
         Position currentPosition = pieceInfo.getPosition();
@@ -36,6 +31,11 @@ public class Pawn extends ChessPiece {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public ChessPiece createNewPiece(PieceInfo newPieceInfo) {
+        return new Pawn(newPieceInfo, changeMovedStrategy());
     }
 
     private MoveStrategy changeMovedStrategy() {

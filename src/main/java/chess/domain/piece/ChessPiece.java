@@ -27,11 +27,20 @@ public abstract class ChessPiece implements Piece {
     }
 
     @Override
-    public abstract ChessPiece createNewPiece(PieceInfo newPieceInfo);
+    public boolean isMoveInvalid(Position newPosition, boolean isDisturbed, boolean isOtherPieceExist,
+                                 boolean isSameTeamExist) {
+        Position currentPosition = pieceInfo.getPosition();
+        if (!moveStrategy.canMove(currentPosition, newPosition)) {
+            return true;
+        }
+        if (isDisturbed || isSameTeamExist) {
+            return true;
+        }
+        return false;
+    }
 
     @Override
-    public abstract boolean isMoveInvalid(Position newPosition, boolean isDisturbed, boolean isOtherPieceExist,
-                                          boolean isSameTeamExist);
+    public abstract ChessPiece createNewPiece(PieceInfo newPieceInfo);
 
     @Override
     public abstract PieceType getType();
