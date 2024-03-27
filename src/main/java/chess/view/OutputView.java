@@ -1,12 +1,12 @@
 package chess.view;
 
-import chess.domain.dto.BoardDto;
+import chess.domain.dto.BoardPrintDto;
 import java.util.List;
 
 public class OutputView {
 
-    public static void printBoard(BoardDto boardDto) {
-        List<List<String>> rawBoard = boardDto.board();
+    public static void printBoard(BoardPrintDto boardPrintDto) {
+        List<List<String>> rawBoard = boardPrintDto.board();
 
         System.out.printf("%n");
         for (int i = 7; i >= 0; i--) {

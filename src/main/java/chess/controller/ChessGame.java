@@ -4,7 +4,7 @@ import chess.domain.board.Board;
 import chess.domain.command.Command;
 import chess.domain.command.CommandLogger;
 import chess.domain.command.CommandType;
-import chess.domain.dto.BoardDto;
+import chess.domain.dto.BoardPrintDto;
 import chess.domain.piece.Piece;
 import chess.domain.piece.PieceType;
 import chess.domain.pieceinfo.PieceInfo;
@@ -69,7 +69,7 @@ public class ChessGame {
         OutputView.printWinnerTeam(blackPiecesScoreSum, whitePiecesScoreSum);
     }
 
-    private BoardDto makeBoardDto(Map<Position, Piece> board) {
+    private BoardPrintDto makeBoardDto(Map<Position, Piece> board) {
         List<List<String>> rawBoard = makeRawBoard();
         for (var entrySet : board.entrySet()) {
             Position position = entrySet.getKey();
@@ -80,7 +80,7 @@ public class ChessGame {
             rawBoard.get(position.getRankIndex() - INDEX_OFFSET)
                     .set(position.getFileIndex() - INDEX_OFFSET, pieceType.getPieceLetter(pieceInfo.getTeam()));
         }
-        return new BoardDto(rawBoard);
+        return new BoardPrintDto(rawBoard);
     }
 
     private List<List<String>> makeRawBoard() {
