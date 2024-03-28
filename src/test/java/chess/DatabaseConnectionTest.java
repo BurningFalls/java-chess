@@ -10,7 +10,7 @@ public class DatabaseConnectionTest {
     @DisplayName("DB 연결이 제대로 되는지 확인한다.")
     @Test
     void databaseConnectionTest() {
-        Connection connection = DatabaseConnection.getConnection();
+        Connection connection = DatabaseConnection.getConnection("chess");
         Assertions.assertThat(connection).isNotNull();
     }
 }

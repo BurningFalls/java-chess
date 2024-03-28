@@ -72,14 +72,4 @@ public class BoardDao {
             throw new RuntimeException(e);
         }
     }
-
-    public void removePieceByPosition(String position) {
-        final var query = "DELETE FROM pieces WHERE position=?";
-        try (var statement = connection.prepareStatement(query)) {
-            statement.setString(1, position);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

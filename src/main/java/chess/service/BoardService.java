@@ -14,8 +14,6 @@ import chess.domain.pieceinfo.Position;
 import chess.domain.pieceinfo.Team;
 import chess.domain.strategy.EmptyMoveStrategy;
 import chess.domain.strategy.MoveStrategy;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -76,14 +74,6 @@ public class BoardService {
                 .forEach(piece -> boardDao.addPiece(changePieceToPieceDto(piece)));
     }
 
-    private PieceDto findPieceByPosition(Position position) {
-        return boardDao.findPieceByPosition(createRawPosition(position));
-    }
-
-    public void removePieceByPosition(Position position) {
-        boardDao.removePieceByPosition(createRawPosition(position));
-    }
-
     private PieceDto changePieceToPieceDto(Piece piece) {
         Position position = piece.getPosition();
         PieceType pieceType = piece.getType();
@@ -120,21 +110,5 @@ public class BoardService {
 
     private String createRawPosition(Position position) {
         return position.getRawFile() + position.getRawRank();
-    }
-
-    private void createPiecesTable(Connection connection) {
-        String dropTableSQL = "DROP TABLE IF EXISTS pieces;";
-        String createTableSQL = "CREATE TABLE pieces ("
-                + "position varchar(2) PRIMARY KEY,"
-                + "type varchar(10),"
-                + "team varchar(10)"
-                + ");";
-
-        try (var statement = connection.createStatement()) {
-            statement.executeUpdate(dropTableSQL);
-            statement.executeUpdate(createTableSQL);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
     }
 }
