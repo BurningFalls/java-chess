@@ -1,7 +1,6 @@
 package chess;
 
-import chess.controller.ChessGame;
-import chess.domain.board.Board;
+import chess.controller.ChessGameController;
 import chess.view.OutputView;
 
 public class Application {
@@ -10,9 +9,8 @@ public class Application {
         OutputView.printChessGameStartMessage();
         OutputView.printCommandGuideMessage();
 
-        Board board = new Board();
-        ChessGame chessGame = new ChessGame(board);
+        ChessGameController chessGameController = new ChessGameController();
 
-        chessGame.startGame();
+        chessGameController.startGame();
     }
 }

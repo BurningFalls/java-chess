@@ -3,11 +3,13 @@ package chess.domain.dao;
 import chess.domain.dto.PieceDto;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class PieceDao {
+public class BoardDao {
     private final Connection connection;
 
-    public PieceDao(Connection connection) {
+    public BoardDao(Connection connection) {
         this.connection = connection;
     }
 
@@ -41,6 +43,34 @@ public class PieceDao {
         }
 
         return null;
+    }
+
+    public List<PieceDto> findAll() {
+        final var query = "SELECT * FROM pieces";
+        try (var statement = connection.prepareStatement(query)) {
+            var resultSet = statement.executeQuery();
+
+            List<PieceDto> pieceDtos = new ArrayList<>();
+            while (resultSet.next()) {
+                pieceDtos.add(new PieceDto(
+                        resultSet.getString("position"),
+                        resultSet.getString("type"),
+                        resultSet.getString("team")
+                ));
+            }
+            return pieceDtos;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void removeAll() {
+        final var query = "DELETE FROM pieces";
+        try (var statement = connection.prepareStatement(query)) {
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void removePieceByPosition(String position) {

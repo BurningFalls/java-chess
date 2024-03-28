@@ -1,6 +1,7 @@
 package chess.domain.command;
 
 import static chess.domain.command.CommandType.END;
+import static chess.domain.command.CommandType.LOAD;
 import static chess.domain.command.CommandType.START;
 import static chess.domain.pieceinfo.Team.WHITE;
 import static chess.domain.pieceinfo.Team.takeTurn;
@@ -19,26 +20,16 @@ public class CommandLogger {
     }
 
     public void addLog(Command command) {
-        CommandType commandType = command.getCommandType();
-        validateCorrectOrder(commandType);
-
         commandLog.add(command);
     }
 
-    private void validateCorrectOrder(CommandType commandType) {
-        validateFirstCommandStart(commandType);
-        validateGameAlreadyStart(commandType);
+    public void checkCommandValidate(Command command) {
+        validateFirstCommandStart(command.getCommandType());
     }
 
     private void validateFirstCommandStart(CommandType commandType) {
-        if (commandLog.isEmpty() && commandType != START) {
+        if (commandLog.isEmpty() && commandType != START && commandType != LOAD) {
             throw new IllegalArgumentException("게임이 시작되지 않았습니다.");
-        }
-    }
-
-    private void validateGameAlreadyStart(CommandType commandType) {
-        if (!commandLog.isEmpty() && commandType == START) {
-            throw new IllegalArgumentException("이미 게임이 진행 중입니다.");
         }
     }
 

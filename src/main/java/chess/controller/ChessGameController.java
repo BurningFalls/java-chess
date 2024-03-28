@@ -10,23 +10,26 @@ import chess.domain.piece.PieceType;
 import chess.domain.pieceinfo.PieceInfo;
 import chess.domain.pieceinfo.Position;
 import chess.domain.pieceinfo.Team;
+import chess.service.BoardService;
 import chess.view.InputView;
 import chess.view.OutputView;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ChessGame {
+public class ChessGameController {
     private static final int BOARD_SIZE = 8;
     private static final String EMPTY_PIECE = ".";
     private static final int INDEX_OFFSET = 1;
 
-    private final Board board;
+    private final BoardService boardService = new BoardService();
     private final CommandLogger commandLogger;
+    private Board board;
 
-    public ChessGame(Board board) {
-        this.board = board;
+    public ChessGameController() {
+        this.board = new Board(new HashMap<>());
         this.commandLogger = new CommandLogger();
     }
 
@@ -46,15 +49,32 @@ public class ChessGame {
 
     private void play() {
         Command command = Command.from(InputView.inputCommand());
-        commandLogger.addLog(command);
+        commandLogger.checkCommandValidate(command);
+        OutputView.printWhoTurn(commandLogger.whoTurn().getRawTeam());
 
-        if (command.isTypeEqualTo(CommandType.MOVE)) {
+        if (command.isTypeEqualTo(CommandType.START)) {
+            processStartCommand();
+        } else if (command.isTypeEqualTo(CommandType.LOAD)) {
+            processLoadCommand();
+        } else if (command.isTypeEqualTo(CommandType.MOVE)) {
             processMoveCommand(command);
         } else if (command.isTypeEqualTo(CommandType.STATUS)) {
             processStatusCommand();
+        } else if (command.isTypeEqualTo(CommandType.SAVE)) {
+            processSaveCommand();
         }
 
+        commandLogger.addLog(command);
         OutputView.printBoard(makeBoardDto(board.getBoard()));
+    }
+
+    private void processStartCommand() {
+        boardService.initializeBoard();
+        board = boardService.loadData();
+    }
+
+    private void processLoadCommand() {
+        board = boardService.loadData();
     }
 
     private void processMoveCommand(Command command) {
@@ -67,6 +87,11 @@ public class ChessGame {
         double whitePiecesScoreSum = board.calculatePiecesScoreSum(Team.WHITE);
         OutputView.printScoreSum(blackPiecesScoreSum, whitePiecesScoreSum);
         OutputView.printWinnerTeam(blackPiecesScoreSum, whitePiecesScoreSum);
+    }
+
+    private void processSaveCommand() {
+
+        boardService.saveData(board);
     }
 
     private BoardPrintDto makeBoardDto(Map<Position, Piece> board) {

@@ -48,6 +48,10 @@ public class Position {
         return findInternalPositions(max, deltaX, deltaY);
     }
 
+    public boolean isFileTwoOrSeven() {
+        return rank.getIndex() == 2 || rank.getIndex() == 7;
+    }
+
     private List<Position> findInternalPositions(int max, int deltaX, int deltaY) {
         List<Position> internalPositions = new ArrayList<>();
         for (int step = 1; step < max; step++) {
@@ -67,6 +71,14 @@ public class Position {
 
     public int getRankIndex() {
         return rank.getIndex();
+    }
+
+    public String getRawFile() {
+        return file.getRawFile();
+    }
+
+    public String getRawRank() {
+        return rank.getRawRank();
     }
 
     @Override

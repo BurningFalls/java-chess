@@ -21,8 +21,8 @@ public class Board {
     private final Map<Position, Piece> board;
     private final DeadPieces deadPieces;
 
-    public Board() {
-        this.board = BoardInitializer.initialize();
+    public Board(Map<Position, Piece> board) {
+        this.board = board;
         this.deadPieces = new DeadPieces();
     }
 
