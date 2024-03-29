@@ -75,14 +75,20 @@ public class ChessGameController {
 
     private void processStartCommand() {
         chessService.initializeChess();
-
-        board = chessService.loadData();
-        turn = chessService.loadTurn();
+        loadDataAndTurn();
     }
 
     private void processLoadCommand() {
-        board = chessService.loadData();
-        turn = chessService.loadTurn();
+        loadDataAndTurn();
+    }
+
+    private void loadDataAndTurn() {
+        try {
+            board = chessService.loadData();
+            turn = chessService.loadTurn();
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("저장된 데이터가 없습니다.");
+        }
     }
 
     private void processMoveCommand(Command command) {
