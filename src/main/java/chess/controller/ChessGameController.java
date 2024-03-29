@@ -20,10 +20,6 @@ import java.util.List;
 import java.util.Map;
 
 public class ChessGameController {
-    private static final int BOARD_SIZE = 8;
-    private static final String EMPTY_PIECE = ".";
-    private static final int INDEX_OFFSET = 1;
-
     private final ChessService chessService = new ChessService();
     private final CommandLogger commandLogger;
     private Board board;
@@ -106,6 +102,7 @@ public class ChessGameController {
     }
 
     private BoardPrintDto makeBoardDto(Map<Position, Piece> board) {
+        int indexOffset = 1;
         List<List<String>> rawBoard = makeRawBoard();
         for (var entrySet : board.entrySet()) {
             Position position = entrySet.getKey();
@@ -113,17 +110,19 @@ public class ChessGameController {
             PieceType pieceType = piece.getType();
             PieceInfo pieceInfo = piece.getPieceInfo();
 
-            rawBoard.get(position.getRankIndex() - INDEX_OFFSET)
-                    .set(position.getFileIndex() - INDEX_OFFSET, pieceType.getPieceLetter(pieceInfo.getTeam()));
+            rawBoard.get(position.getRankIndex() - indexOffset)
+                    .set(position.getFileIndex() - indexOffset, pieceType.getPieceLetter(pieceInfo.getTeam()));
         }
         return new BoardPrintDto(rawBoard);
     }
 
     private List<List<String>> makeRawBoard() {
+        int boardSize = 8;
+        String emptyPiece = ".";
         List<List<String>> rawBoard = new ArrayList<>();
 
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            List<String> row = new ArrayList<>(Collections.nCopies(BOARD_SIZE, EMPTY_PIECE));
+        for (int i = 0; i < boardSize; i++) {
+            List<String> row = new ArrayList<>(Collections.nCopies(boardSize, emptyPiece));
             rawBoard.add(row);
         }
 
