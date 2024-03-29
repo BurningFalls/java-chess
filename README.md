@@ -40,9 +40,3 @@ CREATE TABLE chess_room (
     PRIMARY KEY (id)
 );
 ```
-
-## chess_room 한 개 미리 생성
-
-```mysql-sql
-INSERT INTO chess_room (turn) VALUES ("WHITE");
-```

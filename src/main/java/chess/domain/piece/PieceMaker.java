@@ -18,10 +18,10 @@ public enum PieceMaker {
     BISHOP(pieceInfo -> new Bishop(pieceInfo, new BishopMoveStrategy())),
     QUEEN(pieceInfo -> new Queen(pieceInfo, new QueenMoveStrategy())),
     KING(pieceInfo -> new King(pieceInfo, new KingMoveStrategy())),
-    BLACK_PAWN_FIRST_MOVE(pieceInfo -> new Pawn(pieceInfo, new BlackPawnFirstMoveStrategy())),
-    BLACK_PAWN_NOT_FIRST_MOVE(pieceInfo -> new Pawn(pieceInfo, new BlackPawnNotFirstMoveStrategy())),
-    WHITE_PAWN_FIRST_MOVE(pieceInfo -> new Pawn(pieceInfo, new WhitePawnFirstMoveStrategy())),
-    WHITE_PAWN_NOT_FIRST_MOVE(pieceInfo -> new Pawn(pieceInfo, new WhitePawnNotFirstMoveStrategy()));
+    BLACK_PAWN_FIRST_MOVE(pieceInfo -> new BlackPawnFirstMove(pieceInfo, new BlackPawnFirstMoveStrategy())),
+    BLACK_PAWN_NOT_FIRST_MOVE(pieceInfo -> new BlackPawnNotFirstMove(pieceInfo, new BlackPawnNotFirstMoveStrategy())),
+    WHITE_PAWN_FIRST_MOVE(pieceInfo -> new WhitePawnFirstMove(pieceInfo, new WhitePawnFirstMoveStrategy())),
+    WHITE_PAWN_NOT_FIRST_MOVE(pieceInfo -> new WhitePawnNotFirstMove(pieceInfo, new WhitePawnNotFirstMoveStrategy()));
 
     private final Function<PieceInfo, Piece> pieceConstructor;
 

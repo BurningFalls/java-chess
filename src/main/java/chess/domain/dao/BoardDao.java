@@ -50,8 +50,17 @@ public class BoardDao {
         }
     }
 
-    public void removeAll() {
+    public void deleteAll() {
         final var query = "DELETE FROM " + TABLE_NAME;
+        try (var statement = connection.prepareStatement(query)) {
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void setAutoIncrementToOne() {
+        final var query = "ALTER TABLE " + TABLE_NAME + " AUTO_INCREMENT = 1";
         try (var statement = connection.prepareStatement(query)) {
             statement.executeUpdate();
         } catch (SQLException e) {

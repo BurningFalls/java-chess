@@ -28,14 +28,8 @@ public class LivePiecesInFile {
     }
 
     private Long getPawnCount(Team team) {
-        List<PieceType> pawnTypes = List.of(
-                PieceType.BLACK_PAWN_FIRST_MOVE,
-                PieceType.BLACK_PAWN_NOT_FIRST_MOVE,
-                PieceType.WHITE_PAWN_FIRST_MOVE,
-                PieceType.WHITE_PAWN_NOT_FIRST_MOVE
-        );
         return livePieces.stream()
-                .filter(piece -> pawnTypes.contains(piece.getType()))
+                .filter(piece -> PieceType.isPawn(piece.getType()))
                 .filter(piece -> piece.getTeam() == team)
                 .count();
     }

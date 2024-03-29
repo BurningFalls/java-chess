@@ -8,7 +8,6 @@ public enum PieceType {
     BISHOP("b", "BISHOP"),
     QUEEN("q", "QUEEN"),
     KING("k", "KING"),
-    PAWN("p", "PAWN"),
     BLACK_PAWN_FIRST_MOVE("p", "BLACK_PAWN_FIRST_MOVE"),
     BLACK_PAWN_NOT_FIRST_MOVE("p", "BLACK_PAWN_NOT_FIRST_MOVE"),
     WHITE_PAWN_FIRST_MOVE("p", "WHITE_PAWN_FIRST_MOVE"),
@@ -32,5 +31,12 @@ public enum PieceType {
 
     public String getRawPieceType() {
         return pieceType;
+    }
+
+    public static boolean isPawn(PieceType pieceType) {
+        return (pieceType == BLACK_PAWN_FIRST_MOVE) ||
+                (pieceType == BLACK_PAWN_NOT_FIRST_MOVE) ||
+                (pieceType == WHITE_PAWN_FIRST_MOVE) ||
+                (pieceType == WHITE_PAWN_NOT_FIRST_MOVE);
     }
 }

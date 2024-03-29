@@ -1,15 +1,16 @@
-package chess.domain.board;
+package chess.domain.initializer;
 
 import chess.domain.dao.BoardDao;
 import chess.domain.dto.PieceDto;
 
-public class BoardDatabaseInitializer {
+public class BoardInitializer {
     private static final long CHESS_ROOM_ID = 1;
 
-    private BoardDatabaseInitializer() {
+    private BoardInitializer() {
     }
 
     public static void initialize(BoardDao boardDao) {
+        boardDao.setAutoIncrementToOne();
         placeInitialPieces(boardDao);
     }
 

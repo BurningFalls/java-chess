@@ -2,11 +2,12 @@ package chess.service;
 
 import chess.DatabaseConnection;
 import chess.domain.board.Board;
-import chess.domain.board.BoardDatabaseInitializer;
 import chess.domain.dao.BoardDao;
 import chess.domain.dao.ChessRoomDao;
 import chess.domain.dto.ChessRoomDto;
 import chess.domain.dto.PieceDto;
+import chess.domain.initializer.BoardInitializer;
+import chess.domain.initializer.ChessRoomInitializer;
 import chess.domain.piece.EmptyPiece;
 import chess.domain.piece.Piece;
 import chess.domain.piece.PieceMaker;
@@ -22,7 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BoardService {
+public class ChessService {
     private static final String DATABASE_NAME = "chess";
     private static final int BOARD_SIZE = 8;
     private static final MoveStrategy EMPTY_MOVE_STRATEGY = new EmptyMoveStrategy();
@@ -32,7 +33,7 @@ public class BoardService {
     private final BoardDao boardDao;
     private final ChessRoomDao chessRoomDao;
 
-    public BoardService() {
+    public ChessService() {
         Connection connection = DatabaseConnection.getConnection(DATABASE_NAME);
 
         this.boardDao = new BoardDao(connection);
@@ -43,9 +44,12 @@ public class BoardService {
         chessRoomDao.addChessRoom(new ChessRoomDto(START_TURN));
     }
 
-    public void initializeBoard() {
-        boardDao.removeAll();
-        BoardDatabaseInitializer.initialize(boardDao);
+    public void initializeChess() {
+        boardDao.deleteAll();
+        chessRoomDao.deleteChessRoomById(CHESS_ROOM_ID);
+
+        BoardInitializer.initialize(boardDao);
+        ChessRoomInitializer.initialize(chessRoomDao);
     }
 
     public Board loadData() {
@@ -85,6 +89,8 @@ public class BoardService {
     }
 
     public void saveData(Board board) {
+        boardDao.deleteAll();
+        
         Map<Position, Piece> pieces = board.getBoard();
 
         pieces.values().stream()

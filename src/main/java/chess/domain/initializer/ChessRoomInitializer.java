@@ -1,4 +1,4 @@
-package chess.domain;
+package chess.domain.initializer;
 
 import chess.domain.dao.ChessRoomDao;
 import chess.domain.dto.ChessRoomDto;
@@ -9,6 +9,7 @@ public class ChessRoomInitializer {
     }
 
     public static void initialize(ChessRoomDao chessRoomDao) {
+        chessRoomDao.setAutoIncrementToOne();
         chessRoomDao.addChessRoom(new ChessRoomDto("WHITE"));
     }
 }

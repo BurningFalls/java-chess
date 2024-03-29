@@ -10,7 +10,7 @@ import chess.domain.piece.PieceType;
 import chess.domain.pieceinfo.PieceInfo;
 import chess.domain.pieceinfo.Position;
 import chess.domain.pieceinfo.Team;
-import chess.service.BoardService;
+import chess.service.ChessService;
 import chess.view.InputView;
 import chess.view.OutputView;
 import java.util.ArrayList;
@@ -24,14 +24,14 @@ public class ChessGameController {
     private static final String EMPTY_PIECE = ".";
     private static final int INDEX_OFFSET = 1;
 
-    private final BoardService boardService = new BoardService();
+    private final ChessService chessService = new ChessService();
     private final CommandLogger commandLogger;
     private Board board;
     private Team turn;
 
     public ChessGameController() {
         this.board = new Board(new HashMap<>());
-        this.turn = boardService.loadTurn();
+        this.turn = Team.NONE;
         this.commandLogger = new CommandLogger();
     }
 
@@ -77,13 +77,15 @@ public class ChessGameController {
     }
 
     private void processStartCommand() {
-        boardService.initializeBoard();
-        board = boardService.loadData();
+        chessService.initializeChess();
+
+        board = chessService.loadData();
+        turn = chessService.loadTurn();
     }
 
     private void processLoadCommand() {
-        board = boardService.loadData();
-        turn = boardService.loadTurn();
+        board = chessService.loadData();
+        turn = chessService.loadTurn();
     }
 
     private void processMoveCommand(Command command) {
@@ -99,8 +101,8 @@ public class ChessGameController {
     }
 
     private void processSaveCommand() {
-        boardService.saveData(board);
-        boardService.saveTurn(turn);
+        chessService.saveData(board);
+        chessService.saveTurn(turn);
     }
 
     private BoardPrintDto makeBoardDto(Map<Position, Piece> board) {

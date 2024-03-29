@@ -48,4 +48,23 @@ public class ChessRoomDao {
             throw new RuntimeException(e);
         }
     }
+
+    public void deleteChessRoomById(long id) {
+        final var query = "DELETE FROM " + TABLE_NAME + " where id=?";
+        try (var statement = connection.prepareStatement(query)) {
+            statement.setLong(1, id);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void setAutoIncrementToOne() {
+        final var query = "ALTER TABLE " + TABLE_NAME + " AUTO_INCREMENT = 1";
+        try (var statement = connection.prepareStatement(query)) {
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
