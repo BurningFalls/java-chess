@@ -46,6 +46,7 @@ public class Pawn extends ChessPiece {
 
     @Override
     public PieceType getType() {
+
         return PieceType.PAWN;
     }
 

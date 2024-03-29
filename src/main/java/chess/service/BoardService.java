@@ -23,6 +23,7 @@ public class BoardService {
     private static final String DATABASE_NAME = "chess";
     private static final int BOARD_SIZE = 8;
     private static final MoveStrategy EMPTY_MOVE_STRATEGY = new EmptyMoveStrategy();
+    private static final long CHESS_ROOM_ID = 1;
 
     private final BoardDao boardDao;
 
@@ -80,6 +81,7 @@ public class BoardService {
         Team team = piece.getTeam();
 
         return new PieceDto(
+                CHESS_ROOM_ID,
                 createRawPosition(position),
                 pieceType.getRawPieceType(),
                 team.getRawTeam()
@@ -90,21 +92,8 @@ public class BoardService {
         Position position = Position.of(pieceDto.position());
         Team team = Team.valueOf(pieceDto.team());
         PieceInfo pieceInfo = new PieceInfo(position, team);
-        PieceType pieceType = PieceType.valueOf(pieceDto.type());
 
         PieceMaker pieceMaker = PieceMaker.valueOf(pieceDto.type());
-        if (pieceType == PieceType.PAWN) {
-            if (team == Team.BLACK && position.isFileTwoOrSeven()) {
-                pieceMaker = PieceMaker.valueOf("BLACK_PAWN_FIRST_MOVE");
-            } else if (team == Team.BLACK && !position.isFileTwoOrSeven()) {
-                pieceMaker = PieceMaker.valueOf("BLACK_PAWN_NOT_FIRST_MOVE");
-            } else if (team == Team.WHITE && position.isFileTwoOrSeven()) {
-                pieceMaker = PieceMaker.valueOf("WHITE_PAWN_FIRST_MOVE");
-            } else if (team == Team.WHITE && !position.isFileTwoOrSeven()) {
-                pieceMaker = PieceMaker.valueOf("WHITE_PAWN_NOT_FIRST_MOVE");
-            }
-        }
-
         return pieceMaker.createPiece(pieceInfo);
     }
 

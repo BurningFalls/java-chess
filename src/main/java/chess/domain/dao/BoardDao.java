@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BoardDao {
+    private static final String TABLE_NAME = "piece";
+    private static final long CHESS_ROOM_ID = 1;
+
     private final Connection connection;
 
     public BoardDao(Connection connection) {
@@ -14,49 +17,32 @@ public class BoardDao {
     }
 
     public void addPiece(PieceDto pieceDto) {
-        final var query = "INSERT IGNORE INTO pieces VALUES(?, ?, ?)";
+        final var query =
+                "INSERT IGNORE INTO " + TABLE_NAME + " (chess_room_id, position, type, team) VALUES(?, ?, ?, ?)";
         try (var statement = connection.prepareStatement(query)) {
-            statement.setString(1, pieceDto.position());
-            statement.setString(2, pieceDto.type());
-            statement.setString(3, pieceDto.team());
+            statement.setLong(1, CHESS_ROOM_ID);
+            statement.setString(2, pieceDto.position());
+            statement.setString(3, pieceDto.type());
+            statement.setString(4, pieceDto.team());
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public PieceDto findPieceByPosition(String position) {
-        final var query = "SELECT * FROM pieces WHERE position=?";
-        try (var statement = connection.prepareStatement(query)) {
-            statement.setString(1, position);
-            var resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                return new PieceDto(
-                        resultSet.getString("position"),
-                        resultSet.getString("type"),
-                        resultSet.getString("team")
-                );
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        return null;
-    }
-
     public List<PieceDto> findAll() {
-        final var query = "SELECT * FROM pieces";
+        final var query = "SELECT * FROM " + TABLE_NAME;
         try (var statement = connection.prepareStatement(query)) {
             var resultSet = statement.executeQuery();
 
             List<PieceDto> pieceDtos = new ArrayList<>();
             while (resultSet.next()) {
-                pieceDtos.add(new PieceDto(
-                        resultSet.getString("position"),
-                        resultSet.getString("type"),
-                        resultSet.getString("team")
-                ));
+                long chess_room_id = resultSet.getLong("chess_room_id");
+                String position = resultSet.getString("position");
+                String type = resultSet.getString("type");
+                String team = resultSet.getString("team");
+
+                pieceDtos.add(new PieceDto(chess_room_id, position, type, team));
             }
             return pieceDtos;
         } catch (SQLException e) {
@@ -65,7 +51,7 @@ public class BoardDao {
     }
 
     public void removeAll() {
-        final var query = "DELETE FROM pieces";
+        final var query = "DELETE FROM " + TABLE_NAME;
         try (var statement = connection.prepareStatement(query)) {
             statement.executeUpdate();
         } catch (SQLException e) {
