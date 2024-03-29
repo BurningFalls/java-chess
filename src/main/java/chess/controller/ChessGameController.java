@@ -20,15 +20,16 @@ import java.util.List;
 import java.util.Map;
 
 public class ChessGameController {
-    private final ChessService chessService = new ChessService();
+    private final ChessService chessService;
     private final CommandLogger commandLogger;
     private Board board;
     private Team turn;
 
     public ChessGameController() {
+        this.chessService = new ChessService();
+        this.commandLogger = new CommandLogger();
         this.board = new Board(new HashMap<>());
         this.turn = Team.NONE;
-        this.commandLogger = new CommandLogger();
     }
 
     public void startGame() {
