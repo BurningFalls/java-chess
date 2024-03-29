@@ -2,6 +2,7 @@ package chess.domain.board;
 
 import chess.domain.piece.Pawn;
 import chess.domain.piece.Piece;
+import chess.domain.piece.WhitePawnFirstMove;
 import chess.domain.pieceinfo.PieceInfo;
 import chess.domain.pieceinfo.Position;
 import chess.domain.pieceinfo.Team;
@@ -13,10 +14,13 @@ import org.junit.jupiter.api.Test;
 
 public class LivePiecesInFileTest {
     private static final WhitePawnFirstMoveStrategy WHITE_PAWN_STRATEGY = new WhitePawnFirstMoveStrategy();
-    private static final Pawn FIRST_PAWN = new Pawn(new PieceInfo(Position.of("a2"), Team.WHITE), WHITE_PAWN_STRATEGY);
-    private static final Pawn SECOND_PAWN = new Pawn(new PieceInfo(Position.of("a3"), Team.WHITE), WHITE_PAWN_STRATEGY);
-    private static final Pawn THIRD_PAWN = new Pawn(new PieceInfo(Position.of("a4"), Team.WHITE), WHITE_PAWN_STRATEGY);
-    
+    private static final Pawn FIRST_PAWN =
+            new WhitePawnFirstMove(new PieceInfo(Position.of("a2"), Team.WHITE), WHITE_PAWN_STRATEGY);
+    private static final Pawn SECOND_PAWN =
+            new WhitePawnFirstMove(new PieceInfo(Position.of("a3"), Team.WHITE), WHITE_PAWN_STRATEGY);
+    private static final Pawn THIRD_PAWN =
+            new WhitePawnFirstMove(new PieceInfo(Position.of("a4"), Team.WHITE), WHITE_PAWN_STRATEGY);
+
     @DisplayName("한 열에 폰이 한 개 있으면 합계는 1점이다.")
     @Test
     void calculateOnePawnScoreSumTest() {

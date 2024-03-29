@@ -36,7 +36,7 @@ public class BlackPawnFirstMoveTest {
     @MethodSource("pawnStraightMoveTestParameters")
     void pawnStraightMoveTest(Position currentPosition, Position newPosition, Position expectedMovedPosition) {
         PieceInfo pieceInfo = new PieceInfo(currentPosition, Team.BLACK);
-        Piece blackPawnFirstMove = new Pawn(pieceInfo, new BlackPawnFirstMoveStrategy());
+        Piece blackPawnFirstMove = new BlackPawnFirstMove(pieceInfo, new BlackPawnFirstMoveStrategy());
         Piece movedPawn = blackPawnFirstMove.move(newPosition, false, false, false);
 
         Position actualMovedPosition = movedPawn.getPosition();
@@ -50,7 +50,7 @@ public class BlackPawnFirstMoveTest {
     void pawnDiagonalMoveTest(Position currentPosition, Position newPosition, boolean isDisturbed,
                               boolean isOtherPieceExist, boolean isSameTeam, Position expectedMovedPosition) {
         PieceInfo pieceInfo = new PieceInfo(currentPosition, Team.BLACK);
-        Piece blackPawnFirstMove = new Pawn(pieceInfo, new BlackPawnFirstMoveStrategy());
+        Piece blackPawnFirstMove = new BlackPawnFirstMove(pieceInfo, new BlackPawnFirstMoveStrategy());
         Piece movedPawn = blackPawnFirstMove.move(newPosition, isDisturbed, isOtherPieceExist, isSameTeam);
 
         Position actualMovedPosition = movedPawn.getPosition();

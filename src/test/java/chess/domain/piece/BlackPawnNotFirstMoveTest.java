@@ -26,7 +26,7 @@ public class BlackPawnNotFirstMoveTest {
     @MethodSource("blackPawnMoveTestParameters")
     void pawnMoveTest(Position currentPosition, Position newPosition, Position expectedMovedPosition) {
         PieceInfo pieceInfo = new PieceInfo(currentPosition, Team.BLACK);
-        Piece blackPawnNotFirstMove = new Pawn(pieceInfo, new BlackPawnNotFirstMoveStrategy());
+        Piece blackPawnNotFirstMove = new BlackPawnNotFirstMove(pieceInfo, new BlackPawnNotFirstMoveStrategy());
         Piece movedPawn = blackPawnNotFirstMove.move(newPosition, false, false, false);
 
         Position actualMovedPosition = movedPawn.getPosition();
