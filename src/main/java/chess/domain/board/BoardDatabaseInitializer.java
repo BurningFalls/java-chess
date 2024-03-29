@@ -10,7 +10,6 @@ public class BoardDatabaseInitializer {
     }
 
     public static void initialize(BoardDao boardDao) {
-
         placeInitialPieces(boardDao);
     }
 

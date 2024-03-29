@@ -6,3 +6,5 @@ CREATE TABLE chess_room (
 
     PRIMARY KEY (id)
 );
+
+INSERT INTO chess_room (turn) VALUES ("WHITE");

@@ -27,9 +27,11 @@ public class ChessGameController {
     private final BoardService boardService = new BoardService();
     private final CommandLogger commandLogger;
     private Board board;
+    private Team turn;
 
     public ChessGameController() {
         this.board = new Board(new HashMap<>());
+        this.turn = boardService.loadTurn();
         this.commandLogger = new CommandLogger();
     }
 
@@ -48,10 +50,19 @@ public class ChessGameController {
     }
 
     private void play() {
+        if (commandLogger.isGameStart()) {
+            OutputView.printWhoTurn(turn.getRawTeam());
+        }
         Command command = Command.from(InputView.inputCommand());
         commandLogger.checkCommandValidate(command);
-        OutputView.printWhoTurn(commandLogger.whoTurn().getRawTeam());
 
+        playWithCommand(command);
+
+        commandLogger.addLog(command);
+        OutputView.printBoard(makeBoardDto(board.getBoard()));
+    }
+
+    private void playWithCommand(Command command) {
         if (command.isTypeEqualTo(CommandType.START)) {
             processStartCommand();
         } else if (command.isTypeEqualTo(CommandType.LOAD)) {
@@ -63,9 +74,6 @@ public class ChessGameController {
         } else if (command.isTypeEqualTo(CommandType.SAVE)) {
             processSaveCommand();
         }
-
-        commandLogger.addLog(command);
-        OutputView.printBoard(makeBoardDto(board.getBoard()));
     }
 
     private void processStartCommand() {
@@ -75,11 +83,12 @@ public class ChessGameController {
 
     private void processLoadCommand() {
         board = boardService.loadData();
+        turn = boardService.loadTurn();
     }
 
     private void processMoveCommand(Command command) {
-        board.movePiece(command, commandLogger.whoTurn());
-        commandLogger.changeTurn();
+        board.movePiece(command, turn);
+        turn = Team.takeTurn(turn);
     }
 
     private void processStatusCommand() {
@@ -90,8 +99,8 @@ public class ChessGameController {
     }
 
     private void processSaveCommand() {
-
         boardService.saveData(board);
+        boardService.saveTurn(turn);
     }
 
     private BoardPrintDto makeBoardDto(Map<Position, Piece> board) {

@@ -3,20 +3,15 @@ package chess.domain.command;
 import static chess.domain.command.CommandType.END;
 import static chess.domain.command.CommandType.LOAD;
 import static chess.domain.command.CommandType.START;
-import static chess.domain.pieceinfo.Team.WHITE;
-import static chess.domain.pieceinfo.Team.takeTurn;
 
-import chess.domain.pieceinfo.Team;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CommandLogger {
     private final List<Command> commandLog;
-    private Team turn;
 
     public CommandLogger() {
         this.commandLog = new ArrayList<>();
-        this.turn = WHITE;
     }
 
     public void addLog(Command command) {
@@ -40,19 +35,15 @@ public class CommandLogger {
         }
     }
 
-    public Team whoTurn() {
-        return turn;
-    }
-
-    public void changeTurn() {
-        turn = takeTurn(turn);
-    }
-
     public boolean isCommandEnd() {
         if (commandLog.isEmpty()) {
             return false;
         }
         return getLastCommandType() == END;
+    }
+
+    public boolean isGameStart() {
+        return !commandLog.isEmpty();
     }
 
     private CommandType getLastCommandType() {

@@ -4,6 +4,8 @@ import chess.DatabaseConnection;
 import chess.domain.board.Board;
 import chess.domain.board.BoardDatabaseInitializer;
 import chess.domain.dao.BoardDao;
+import chess.domain.dao.ChessRoomDao;
+import chess.domain.dto.ChessRoomDto;
 import chess.domain.dto.PieceDto;
 import chess.domain.piece.EmptyPiece;
 import chess.domain.piece.Piece;
@@ -14,6 +16,7 @@ import chess.domain.pieceinfo.Position;
 import chess.domain.pieceinfo.Team;
 import chess.domain.strategy.EmptyMoveStrategy;
 import chess.domain.strategy.MoveStrategy;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,11 +27,20 @@ public class BoardService {
     private static final int BOARD_SIZE = 8;
     private static final MoveStrategy EMPTY_MOVE_STRATEGY = new EmptyMoveStrategy();
     private static final long CHESS_ROOM_ID = 1;
+    private static final String START_TURN = "WHITE";
 
     private final BoardDao boardDao;
+    private final ChessRoomDao chessRoomDao;
 
     public BoardService() {
-        this.boardDao = new BoardDao(DatabaseConnection.getConnection(DATABASE_NAME));
+        Connection connection = DatabaseConnection.getConnection(DATABASE_NAME);
+
+        this.boardDao = new BoardDao(connection);
+        this.chessRoomDao = new ChessRoomDao(connection);
+    }
+
+    public void createChessRoom() {
+        chessRoomDao.addChessRoom(new ChessRoomDto(START_TURN));
     }
 
     public void initializeBoard() {
@@ -49,6 +61,11 @@ public class BoardService {
         fillEmptyPieces(pieces);
 
         return new Board(pieces);
+    }
+
+    public Team loadTurn() {
+        String turn = chessRoomDao.findTurnById(CHESS_ROOM_ID);
+        return Team.valueOf(turn);
     }
 
     private void fillEmptyPieces(Map<Position, Piece> pieces) {
@@ -73,6 +90,10 @@ public class BoardService {
         pieces.values().stream()
                 .filter(piece -> piece.getType() != PieceType.EMPTY)
                 .forEach(piece -> boardDao.addPiece(changePieceToPieceDto(piece)));
+    }
+
+    public void saveTurn(Team turn) {
+        chessRoomDao.updateTurnById(turn.getRawTeam(), CHESS_ROOM_ID);
     }
 
     private PieceDto changePieceToPieceDto(Piece piece) {
