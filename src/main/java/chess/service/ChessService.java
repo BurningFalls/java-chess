@@ -4,7 +4,6 @@ import chess.DatabaseConnection;
 import chess.domain.board.Board;
 import chess.domain.dao.BoardDao;
 import chess.domain.dao.ChessRoomDao;
-import chess.domain.dto.ChessRoomDto;
 import chess.domain.dto.PieceDto;
 import chess.domain.initializer.BoardInitializer;
 import chess.domain.initializer.ChessRoomInitializer;
@@ -28,7 +27,6 @@ public class ChessService {
     private static final int BOARD_SIZE = 8;
     private static final MoveStrategy EMPTY_MOVE_STRATEGY = new EmptyMoveStrategy();
     private static final long CHESS_ROOM_ID = 1;
-    private static final String START_TURN = "WHITE";
 
     private final BoardDao boardDao;
     private final ChessRoomDao chessRoomDao;
@@ -38,10 +36,6 @@ public class ChessService {
 
         this.boardDao = new BoardDao(connection);
         this.chessRoomDao = new ChessRoomDao(connection);
-    }
-
-    public void createChessRoom() {
-        chessRoomDao.addChessRoom(new ChessRoomDto(START_TURN));
     }
 
     public void initializeChess() {
@@ -90,7 +84,7 @@ public class ChessService {
 
     public void saveData(Board board) {
         boardDao.deleteAll();
-        
+
         Map<Position, Piece> pieces = board.getBoard();
 
         pieces.values().stream()
