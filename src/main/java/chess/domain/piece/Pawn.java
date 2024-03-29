@@ -46,8 +46,18 @@ public class Pawn extends ChessPiece {
 
     @Override
     public PieceType getType() {
-
-        return PieceType.PAWN;
+        Position position = pieceInfo.getPosition();
+        Team team = pieceInfo.getTeam();
+        if (team == Team.BLACK && position.isFileTwoOrSeven()) {
+            return PieceType.BLACK_PAWN_FIRST_MOVE;
+        } else if (team == Team.BLACK && !position.isFileTwoOrSeven()) {
+            return PieceType.BLACK_PAWN_NOT_FIRST_MOVE;
+        } else if (team == Team.WHITE && position.isFileTwoOrSeven()) {
+            return PieceType.WHITE_PAWN_FIRST_MOVE;
+        } else if (team == Team.WHITE && !position.isFileTwoOrSeven()) {
+            return PieceType.BLACK_PAWN_NOT_FIRST_MOVE;
+        }
+        return null;
     }
 
     @Override
