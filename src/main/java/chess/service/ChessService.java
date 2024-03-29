@@ -2,8 +2,8 @@ package chess.service;
 
 import chess.DatabaseConnection;
 import chess.domain.board.Board;
-import chess.domain.dao.BoardDao;
 import chess.domain.dao.ChessRoomDao;
+import chess.domain.dao.PieceDao;
 import chess.domain.dto.PieceDto;
 import chess.domain.initializer.BoardInitializer;
 import chess.domain.initializer.ChessRoomInitializer;
@@ -28,26 +28,26 @@ public class ChessService {
     private static final MoveStrategy EMPTY_MOVE_STRATEGY = new EmptyMoveStrategy();
     private static final long CHESS_ROOM_ID = 1;
 
-    private final BoardDao boardDao;
+    private final PieceDao pieceDao;
     private final ChessRoomDao chessRoomDao;
 
     public ChessService() {
         Connection connection = DatabaseConnection.getConnection(DATABASE_NAME);
 
-        this.boardDao = new BoardDao(connection);
+        this.pieceDao = new PieceDao(connection);
         this.chessRoomDao = new ChessRoomDao(connection);
     }
 
     public void initializeChess() {
-        boardDao.deleteAll();
+        pieceDao.deleteAll();
         chessRoomDao.deleteChessRoomById(CHESS_ROOM_ID);
 
-        BoardInitializer.initialize(boardDao);
+        BoardInitializer.initialize(pieceDao);
         ChessRoomInitializer.initialize(chessRoomDao);
     }
 
     public Board loadData() {
-        List<PieceDto> pieceDtos = boardDao.findAll();
+        List<PieceDto> pieceDtos = pieceDao.findAll();
 
         Map<Position, Piece> pieces = new HashMap<>();
         for (PieceDto pieceDto : pieceDtos) {
@@ -83,13 +83,13 @@ public class ChessService {
     }
 
     public void saveData(Board board) {
-        boardDao.deleteAll();
+        pieceDao.deleteAll();
 
         Map<Position, Piece> pieces = board.getBoard();
 
         pieces.values().stream()
                 .filter(piece -> piece.getType() != PieceType.EMPTY)
-                .forEach(piece -> boardDao.addPiece(changePieceToPieceDto(piece)));
+                .forEach(piece -> pieceDao.addPiece(changePieceToPieceDto(piece)));
     }
 
     public void saveTurn(Team turn) {

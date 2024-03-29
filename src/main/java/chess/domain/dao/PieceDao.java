@@ -6,13 +6,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BoardDao {
+public class PieceDao {
     private static final String TABLE_NAME = "piece";
     private static final long CHESS_ROOM_ID = 1;
 
     private final Connection connection;
 
-    public BoardDao(Connection connection) {
+    public PieceDao(Connection connection) {
         this.connection = connection;
     }
 

@@ -4,13 +4,9 @@ import static chess.domain.pieceinfo.PieceScore.PAWN_SCORE;
 
 import chess.domain.pieceinfo.PieceInfo;
 import chess.domain.pieceinfo.Position;
-import chess.domain.strategy.BlackPawnNotFirstMoveStrategy;
 import chess.domain.strategy.MoveStrategy;
-import chess.domain.strategy.WhitePawnNotFirstMoveStrategy;
 
 public abstract class Pawn extends ChessPiece {
-    private static final WhitePawnNotFirstMoveStrategy whitePawnNotFirstMoveStrategy = new WhitePawnNotFirstMoveStrategy();
-    private static final BlackPawnNotFirstMoveStrategy blackPawnNotFirstMoveStrategy = new BlackPawnNotFirstMoveStrategy();
 
     public Pawn(PieceInfo pieceInfo, MoveStrategy moveStrategy) {
         super(pieceInfo, moveStrategy);
