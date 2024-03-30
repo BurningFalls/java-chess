@@ -66,7 +66,7 @@ public class Command {
 
     private void checkCommandTypeMoveWhenGetRoute() {
         if (commandType != MOVE) {
-            throw new IllegalArgumentException("start와 end 커맨드 타입은 경로를 갖지 않습니다.");
+            throw new IllegalArgumentException("move가 아닌 커맨드 타입은 경로를 갖지 않습니다.");
         }
     }
 }
