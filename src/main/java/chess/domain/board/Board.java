@@ -35,7 +35,8 @@ public class Board {
         validateMoveSuccess(piece, movedPiece);
         deadPieces.addPiece(removedPiece);
 
-        renewBoard(movedPiece, source, target);
+        removePieceAtSource(source);
+        placePieceAtTarget(movedPiece, target);
     }
 
     public boolean isKingDead() {
@@ -77,10 +78,13 @@ public class Board {
         }
     }
 
-    private void renewBoard(Piece movedPiece, Position source, Position target) {
+    private void removePieceAtSource(Position source) {
         Piece emptyPiece = new EmptyPiece(new PieceInfo(source, Team.NONE), EMPTY_MOVE_STRATEGY);
 
         board.put(source, emptyPiece);
+    }
+
+    private void placePieceAtTarget(Piece movedPiece, Position target) {
         board.put(target, movedPiece);
     }
 
