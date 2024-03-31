@@ -52,11 +52,6 @@ public class Position {
         return file.getIndex() == fileIndex;
     }
 
-    public boolean isFileTwoOrSeven() {
-        return rank.getIndex() == 2 || rank.getIndex() == 7;
-    }
-
-
     private List<Position> findInternalPositions(int max, int deltaX, int deltaY) {
         List<Position> internalPositions = new ArrayList<>();
         for (int step = 1; step < max; step++) {
