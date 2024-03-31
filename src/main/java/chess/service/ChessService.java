@@ -26,28 +26,29 @@ public class ChessService {
     private static final String DATABASE_NAME = "chess";
     private static final int BOARD_SIZE = 8;
     private static final MoveStrategy EMPTY_MOVE_STRATEGY = new EmptyMoveStrategy();
-    private static final long CHESS_ROOM_ID = 1;
 
+    private final Long chess_room_id;
     private final PieceDao pieceDao;
     private final ChessRoomDao chessRoomDao;
 
-    public ChessService() {
+    public ChessService(Long chessRoomId) {
         Connection connection = DatabaseConnection.getConnection(DATABASE_NAME);
 
+        this.chess_room_id = chessRoomId;
         this.pieceDao = new PieceDao(connection);
         this.chessRoomDao = new ChessRoomDao(connection);
     }
 
     public void initializeChess() {
-        pieceDao.deleteAll();
-        chessRoomDao.deleteChessRoomById(CHESS_ROOM_ID);
+        pieceDao.deleteAll(chess_room_id);
+        chessRoomDao.deleteChessRoomById(chess_room_id);
 
-        BoardInitializer.initialize(pieceDao);
-        ChessRoomInitializer.initialize(chessRoomDao);
+        BoardInitializer.initialize(pieceDao, chess_room_id);
+        ChessRoomInitializer.initialize(chessRoomDao, chess_room_id);
     }
 
     public Board loadPieces() {
-        List<PieceDto> pieceDtos = pieceDao.findAll();
+        List<PieceDto> pieceDtos = pieceDao.findAll(chess_room_id);
 
         Map<Position, Piece> pieces = new HashMap<>();
         for (PieceDto pieceDto : pieceDtos) {
@@ -62,7 +63,7 @@ public class ChessService {
     }
 
     public Team loadTurn() {
-        String turn = chessRoomDao.findTurnById(CHESS_ROOM_ID);
+        String turn = chessRoomDao.findTurnById(chess_room_id);
         return Team.valueOf(turn);
     }
 
@@ -83,17 +84,17 @@ public class ChessService {
     }
 
     public void saveData(Board board) {
-        pieceDao.deleteAll();
+        pieceDao.deleteAll(chess_room_id);
 
         Map<Position, Piece> pieces = board.getBoard();
 
         pieces.values().stream()
                 .filter(piece -> piece.getType() != PieceType.EMPTY)
-                .forEach(piece -> pieceDao.addPiece(changePieceToPieceDto(piece)));
+                .forEach(piece -> pieceDao.addPiece(changePieceToPieceDto(piece), chess_room_id));
     }
 
     public void saveTurn(Team turn) {
-        chessRoomDao.updateTurnById(turn.getRawTeam(), CHESS_ROOM_ID);
+        chessRoomDao.updateTurnById(turn.getRawTeam(), chess_room_id);
     }
 
     private PieceDto changePieceToPieceDto(Piece piece) {
@@ -102,7 +103,6 @@ public class ChessService {
         Team team = piece.getTeam();
 
         return new PieceDto(
-                CHESS_ROOM_ID,
                 createRawPosition(position),
                 pieceType.getRawPieceType(),
                 team.getRawTeam()

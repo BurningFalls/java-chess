@@ -9,8 +9,7 @@ public class ChessRoomInitializer {
     private ChessRoomInitializer() {
     }
 
-    public static void initialize(ChessRoomDao chessRoomDao) {
-        chessRoomDao.setAutoIncrementToOne();
-        chessRoomDao.addChessRoom(new ChessRoomDto(START_TURN));
+    public static void initialize(ChessRoomDao chessRoomDao, Long chess_room_id) {
+        chessRoomDao.addChessRoom(new ChessRoomDto(chess_room_id, START_TURN));
     }
 }

@@ -21,9 +21,9 @@ public class ChessGameController {
     private final CommandLogger commandLogger;
     private final ChessGame chessGame;
 
-    public ChessGameController() {
+    public ChessGameController(Long chess_room_id) {
         this.commandLogger = new CommandLogger();
-        this.chessGame = new ChessGame();
+        this.chessGame = new ChessGame(chess_room_id);
     }
 
     public void startGame() {
@@ -82,7 +82,7 @@ public class ChessGameController {
 
     private void processStatusCommand() {
         Map<Team, Double> scores = chessGame.calculatePiecesScoreSum();
-        
+
         OutputView.printScoreSum(scores.get(Team.BLACK), scores.get(Team.WHITE));
         OutputView.printWinnerTeam(scores.get(Team.BLACK), scores.get(Team.WHITE));
     }

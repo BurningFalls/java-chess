@@ -9,11 +9,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ChessGame {
-    private final ChessService chessService = new ChessService();
+    private final ChessService chessService;
     private Board board;
     private Team turn;
 
-    public ChessGame() {
+    public ChessGame(Long chess_room_id) {
+        chessService = new ChessService(chess_room_id);
         this.board = new Board(new HashMap<>());
         this.turn = Team.NONE;
     }
@@ -24,6 +25,7 @@ public class ChessGame {
 
     public void initializeData() {
         chessService.initializeChess();
+
     }
 
     public void loadData() {

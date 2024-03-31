@@ -1,4 +1,4 @@
 package chess.domain.dto;
 
-public record ChessRoomDto(String turn) {
+public record ChessRoomDto(Long id, String turn) {
 }
