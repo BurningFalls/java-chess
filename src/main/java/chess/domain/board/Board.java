@@ -55,7 +55,7 @@ public class Board {
 
     private List<Piece> getPiecesInFile(int fileIndex) {
         return board.entrySet().stream()
-                .filter(entry -> entry.getKey().getFileIndex() == fileIndex)
+                .filter(entry -> entry.getKey().isCorrectFile(fileIndex))
                 .map(Map.Entry::getValue)
                 .toList();
     }

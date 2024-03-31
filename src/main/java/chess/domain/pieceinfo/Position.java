@@ -48,9 +48,14 @@ public class Position {
         return findInternalPositions(max, deltaX, deltaY);
     }
 
+    public boolean isCorrectFile(int fileIndex) {
+        return file.getIndex() == fileIndex;
+    }
+
     public boolean isFileTwoOrSeven() {
         return rank.getIndex() == 2 || rank.getIndex() == 7;
     }
+
 
     private List<Position> findInternalPositions(int max, int deltaX, int deltaY) {
         List<Position> internalPositions = new ArrayList<>();
