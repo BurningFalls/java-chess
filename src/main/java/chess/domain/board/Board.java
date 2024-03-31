@@ -3,7 +3,6 @@ package chess.domain.board;
 import static chess.domain.board.File.A;
 import static chess.domain.board.File.H;
 
-import chess.domain.command.Command;
 import chess.domain.piece.EmptyPiece;
 import chess.domain.piece.Piece;
 import chess.domain.piece.PieceType;
@@ -26,9 +25,7 @@ public class Board {
         this.deadPieces = new DeadPieces();
     }
 
-    public void movePiece(Command command, Team turn) {
-        Position source = command.getSource();
-        Position target = command.getTarget();
+    public void movePiece(Position source, Position target, Team turn) {
         validatePieceExist(source);
         validateMyTurn(source, turn);
 

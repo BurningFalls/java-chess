@@ -1,6 +1,6 @@
 package chess.controller;
 
-import chess.domain.board.Board;
+import chess.domain.ChessGame;
 import chess.domain.command.Command;
 import chess.domain.command.CommandLogger;
 import chess.domain.command.CommandType;
@@ -10,30 +10,24 @@ import chess.domain.piece.PieceType;
 import chess.domain.pieceinfo.PieceInfo;
 import chess.domain.pieceinfo.Position;
 import chess.domain.pieceinfo.Team;
-import chess.service.ChessService;
 import chess.view.InputView;
 import chess.view.OutputView;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ChessGameController {
-    private final ChessService chessService;
     private final CommandLogger commandLogger;
-    private Board board;
-    private Team turn;
+    private final ChessGame chessGame;
 
     public ChessGameController() {
-        this.chessService = new ChessService();
         this.commandLogger = new CommandLogger();
-        this.board = new Board(new HashMap<>());
-        this.turn = Team.NONE;
+        this.chessGame = new ChessGame();
     }
 
     public void startGame() {
-        while (!commandLogger.isCommandEnd() && !board.isKingDead()) {
+        while (!commandLogger.isCommandEnd() && chessGame.isNotFinish()) {
             playGame();
         }
     }
@@ -48,7 +42,7 @@ public class ChessGameController {
 
     private void play() {
         if (commandLogger.isGameStart()) {
-            OutputView.printWhoTurn(turn.getRawTeam());
+            OutputView.printWhoTurn(chessGame.getRawTurn());
         }
         Command command = Command.from(InputView.inputCommand());
         commandLogger.checkCommandValidate(command);
@@ -56,7 +50,7 @@ public class ChessGameController {
         playWithCommand(command);
 
         commandLogger.addLog(command);
-        OutputView.printBoard(makeBoardDto(board.getBoard()));
+        OutputView.printBoard(makeBoardDto(chessGame.getRawBoard()));
     }
 
     private void playWithCommand(Command command) {
@@ -74,38 +68,27 @@ public class ChessGameController {
     }
 
     private void processStartCommand() {
-        chessService.initializeChess();
-        loadDataAndTurn();
+        chessGame.initializeData();
+        chessGame.loadData();
     }
 
     private void processLoadCommand() {
-        loadDataAndTurn();
-    }
-
-    private void loadDataAndTurn() {
-        try {
-            board = chessService.loadData();
-            turn = chessService.loadTurn();
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("저장된 데이터가 없습니다.");
-        }
+        chessGame.loadData();
     }
 
     private void processMoveCommand(Command command) {
-        board.movePiece(command, turn);
-        turn = Team.takeTurn(turn);
+        chessGame.movePiece(command.getSource(), command.getTarget());
     }
 
     private void processStatusCommand() {
-        double blackPiecesScoreSum = board.calculatePiecesScoreSum(Team.BLACK);
-        double whitePiecesScoreSum = board.calculatePiecesScoreSum(Team.WHITE);
-        OutputView.printScoreSum(blackPiecesScoreSum, whitePiecesScoreSum);
-        OutputView.printWinnerTeam(blackPiecesScoreSum, whitePiecesScoreSum);
+        Map<Team, Double> scores = chessGame.calculatePiecesScoreSum();
+        
+        OutputView.printScoreSum(scores.get(Team.BLACK), scores.get(Team.WHITE));
+        OutputView.printWinnerTeam(scores.get(Team.BLACK), scores.get(Team.WHITE));
     }
 
     private void processSaveCommand() {
-        chessService.saveData(board);
-        chessService.saveTurn(turn);
+        chessGame.saveData();
     }
 
     private BoardPrintDto makeBoardDto(Map<Position, Piece> board) {

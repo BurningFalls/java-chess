@@ -46,7 +46,7 @@ public class ChessService {
         ChessRoomInitializer.initialize(chessRoomDao);
     }
 
-    public Board loadData() {
+    public Board loadPieces() {
         List<PieceDto> pieceDtos = pieceDao.findAll();
 
         Map<Position, Piece> pieces = new HashMap<>();
