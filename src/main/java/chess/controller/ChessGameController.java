@@ -89,6 +89,7 @@ public class ChessGameController {
     }
 
     private void processSaveCommand() {
+        chessGame.deleteData();
         chessGame.saveData();
     }
 

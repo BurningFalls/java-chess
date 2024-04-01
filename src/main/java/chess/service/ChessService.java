@@ -40,7 +40,7 @@ public class ChessService {
     }
 
     public void initializeChess() {
-        pieceDao.deleteAll(chess_room_id);
+        pieceDao.deleteAllByChessRoomId(chess_room_id);
         chessRoomDao.deleteChessRoomById(chess_room_id);
 
         BoardInitializer.initialize(pieceDao, chess_room_id);
@@ -48,7 +48,7 @@ public class ChessService {
     }
 
     public Board loadPieces() {
-        List<PieceDto> pieceDtos = pieceDao.findAll(chess_room_id);
+        List<PieceDto> pieceDtos = pieceDao.findAllByChessRoomId(chess_room_id);
 
         Map<Position, Piece> pieces = new HashMap<>();
         for (PieceDto pieceDto : pieceDtos) {
@@ -83,14 +83,16 @@ public class ChessService {
         return positions;
     }
 
-    public void saveData(Board board) {
-        pieceDao.deleteAll(chess_room_id);
-
+    public void savePieces(Board board) {
         Map<Position, Piece> pieces = board.getBoard();
 
         pieces.values().stream()
                 .filter(piece -> piece.getType() != PieceType.EMPTY)
-                .forEach(piece -> pieceDao.addPiece(changePieceToPieceDto(piece), chess_room_id));
+                .forEach(piece -> pieceDao.addPieceByChessRoomId(changePieceToPieceDto(piece), chess_room_id));
+    }
+
+    public void deletePieces() {
+        pieceDao.deleteAllByChessRoomId(chess_room_id);
     }
 
     public void saveTurn(Team turn) {

@@ -48,8 +48,12 @@ public class ChessGame {
     }
 
     public void saveData() {
-        chessService.saveData(board);
+        chessService.savePieces(board);
         chessService.saveTurn(turn);
+    }
+
+    public void deleteData() {
+        chessService.deletePieces();
     }
 
     public String getRawTurn() {

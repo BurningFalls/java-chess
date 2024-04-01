@@ -16,7 +16,7 @@ public class PieceDao {
         this.connection = connection;
     }
 
-    public void addPiece(PieceDto pieceDto, Long chess_room_id) {
+    public void addPieceByChessRoomId(PieceDto pieceDto, Long chess_room_id) {
         final var query =
                 "INSERT IGNORE INTO " + TABLE_NAME + " (chess_room_id, position, type, team) VALUES(?, ?, ?, ?)";
         try (var statement = connection.prepareStatement(query)) {
@@ -30,7 +30,7 @@ public class PieceDao {
         }
     }
 
-    public List<PieceDto> findAll(Long chess_room_id) {
+    public List<PieceDto> findAllByChessRoomId(Long chess_room_id) {
         final var query = "SELECT * FROM " + TABLE_NAME + " where chess_room_id=?";
         try (var statement = connection.prepareStatement(query)) {
             statement.setLong(1, chess_room_id);
@@ -56,7 +56,7 @@ public class PieceDao {
         }
     }
 
-    public void deleteAll(Long chess_room_id) {
+    public void deleteAllByChessRoomId(Long chess_room_id) {
         final var query = "DELETE FROM " + TABLE_NAME + " where chess_room_id=?";
         try (var statement = connection.prepareStatement(query)) {
             statement.setLong(1, chess_room_id);
