@@ -7,6 +7,7 @@ import chess.domain.pieceinfo.Team;
 import chess.service.ChessService;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 public class ChessGame {
     private final ChessService chessService;
@@ -32,8 +33,8 @@ public class ChessGame {
         try {
             board = chessService.loadPieces();
             turn = chessService.loadTurn();
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("저장된 데이터가 없습니다.");
+        } catch (NoSuchElementException e) {
+            throw new IllegalArgumentException(e.getMessage());
         }
     }
 

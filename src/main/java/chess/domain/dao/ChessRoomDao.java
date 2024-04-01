@@ -3,6 +3,7 @@ package chess.domain.dao;
 import chess.domain.dto.ChessRoomDto;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.NoSuchElementException;
 
 public class ChessRoomDao {
     private static final String TABLE_NAME = "chess_room";
@@ -44,7 +45,7 @@ public class ChessRoomDao {
             if (resultSet.next()) {
                 return resultSet.getString("turn");
             }
-            return null;
+            throw new NoSuchElementException("ID에 해당하는 턴을 찾을 수 없습니다: " + id);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

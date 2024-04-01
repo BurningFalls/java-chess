@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class PieceDao {
     private static final String TABLE_NAME = "piece";
@@ -44,6 +45,11 @@ public class PieceDao {
 
                 pieceDtos.add(new PieceDto(position, type, team));
             }
+
+            if (pieceDtos.isEmpty()) {
+                throw new NoSuchElementException("ID에 해당하는 피스가 없습니다: " + chess_room_id);
+            }
+
             return pieceDtos;
         } catch (SQLException e) {
             throw new RuntimeException(e);
