@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 public class ChessGameController {
     private final CommandLogger commandLogger;
@@ -35,7 +36,7 @@ public class ChessGameController {
     private void playGame() {
         try {
             play();
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | NoSuchElementException e) {
             OutputView.printErrorMessage(e.getMessage());
         }
     }

@@ -7,7 +7,6 @@ import chess.domain.pieceinfo.Team;
 import chess.service.ChessService;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 public class ChessGame {
     private final ChessService chessService;
@@ -30,12 +29,8 @@ public class ChessGame {
     }
 
     public void loadData() {
-        try {
-            board = chessService.loadPieces();
-            turn = chessService.loadTurn();
-        } catch (NoSuchElementException e) {
-            throw new IllegalArgumentException(e.getMessage());
-        }
+        board = chessService.loadPieces();
+        turn = chessService.loadTurn();
     }
 
     public void movePiece(Position target, Position source) {
