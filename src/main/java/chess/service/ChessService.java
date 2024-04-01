@@ -1,6 +1,5 @@
 package chess.service;
 
-import chess.DatabaseConnection;
 import chess.domain.board.Board;
 import chess.domain.dao.ChessRoomDao;
 import chess.domain.dao.PieceDao;
@@ -16,14 +15,12 @@ import chess.domain.pieceinfo.Position;
 import chess.domain.pieceinfo.Team;
 import chess.domain.strategy.EmptyMoveStrategy;
 import chess.domain.strategy.MoveStrategy;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ChessService {
-    private static final String DATABASE_NAME = "chess";
     private static final int BOARD_SIZE = 8;
     private static final MoveStrategy EMPTY_MOVE_STRATEGY = new EmptyMoveStrategy();
 
@@ -31,12 +28,10 @@ public class ChessService {
     private final PieceDao pieceDao;
     private final ChessRoomDao chessRoomDao;
 
-    public ChessService(Long chessRoomId) {
-        Connection connection = DatabaseConnection.getConnection(DATABASE_NAME);
-
+    public ChessService(Long chessRoomId, PieceDao pieceDao, ChessRoomDao chessRoomDao) {
         this.chess_room_id = chessRoomId;
-        this.pieceDao = new PieceDao(connection);
-        this.chessRoomDao = new ChessRoomDao(connection);
+        this.pieceDao = pieceDao;
+        this.chessRoomDao = chessRoomDao;
     }
 
     public void initializeChess() {
@@ -98,7 +93,7 @@ public class ChessService {
     public void saveTurn(Team turn) {
         chessRoomDao.updateTurnById(turn.getRawTeam(), chess_room_id);
     }
-
+    
     private PieceDto changePieceToPieceDto(Piece piece) {
         Position position = piece.getPosition();
         PieceType pieceType = piece.getType();
