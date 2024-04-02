@@ -6,7 +6,15 @@ import java.sql.SQLException;
 import java.util.NoSuchElementException;
 
 public class MysqlChessRoomDao implements ChessRoomDao {
+    private static MysqlChessRoomDao instance;
     private static final String TABLE_NAME = "chess_room";
+
+    public static synchronized MysqlChessRoomDao getInstance() {
+        if (instance == null) {
+            instance = new MysqlChessRoomDao();
+        }
+        return instance;
+    }
 
     @Override
     public void addChessRoom(Connection connection, ChessRoomDto chessRoomDto) {

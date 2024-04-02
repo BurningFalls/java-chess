@@ -17,7 +17,7 @@ public class ChessGame {
     private Team turn;
 
     public ChessGame() {
-        chessService = ChessService.getInstance(new MysqlPieceDao(), new MysqlChessRoomDao());
+        chessService = ChessService.getInstance(MysqlPieceDao.getInstance(), MysqlChessRoomDao.getInstance());
         this.board = new Board(new HashMap<>());
         this.turn = Team.NONE;
     }

@@ -8,7 +8,15 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 public class MysqlPieceDao implements PieceDao {
+    private static MysqlPieceDao instance;
     private static final String TABLE_NAME = "piece";
+
+    public static synchronized MysqlPieceDao getInstance() {
+        if (instance == null) {
+            instance = new MysqlPieceDao();
+        }
+        return instance;
+    }
 
     @Override
     public void addPieceByChessRoomId(Connection connection, PieceDto pieceDto, Long chess_room_id) {
