@@ -22,59 +22,59 @@ public class ChessGameController {
     private final CommandLogger commandLogger;
     private final ChessGame chessGame;
 
-    public ChessGameController(Long chess_room_id) {
+    public ChessGameController() {
         this.commandLogger = new CommandLogger();
-        this.chessGame = new ChessGame(chess_room_id);
+        this.chessGame = new ChessGame();
     }
 
-    public void startGame() {
+    public void startGame(Long chessRoomId) {
         while (!commandLogger.isCommandEnd() && chessGame.isNotFinish()) {
-            playGame();
+            playGame(chessRoomId);
         }
     }
 
-    private void playGame() {
+    private void playGame(Long chessRoomId) {
         try {
-            play();
+            play(chessRoomId);
         } catch (IllegalArgumentException | NoSuchElementException e) {
             OutputView.printErrorMessage(e.getMessage());
         }
     }
 
-    private void play() {
+    private void play(Long chessRoomId) {
         if (commandLogger.isGameStart()) {
             OutputView.printWhoTurn(chessGame.getRawTurn());
         }
         Command command = Command.from(InputView.inputCommand());
         commandLogger.checkCommandValidate(command);
 
-        playWithCommand(command);
+        playWithCommand(command, chessRoomId);
 
         commandLogger.addLog(command);
         OutputView.printBoard(makeBoardDto(chessGame.getRawBoard()));
     }
 
-    private void playWithCommand(Command command) {
+    private void playWithCommand(Command command, Long chessRoomId) {
         if (command.isTypeEqualTo(CommandType.START)) {
-            processStartCommand();
+            processStartCommand(chessRoomId);
         } else if (command.isTypeEqualTo(CommandType.LOAD)) {
-            processLoadCommand();
+            processLoadCommand(chessRoomId);
         } else if (command.isTypeEqualTo(CommandType.MOVE)) {
             processMoveCommand(command);
         } else if (command.isTypeEqualTo(CommandType.STATUS)) {
             processStatusCommand();
         } else if (command.isTypeEqualTo(CommandType.SAVE)) {
-            processSaveCommand();
+            processSaveCommand(chessRoomId);
         }
     }
 
-    private void processStartCommand() {
-        chessGame.initializeData();
-        chessGame.loadData();
+    private void processStartCommand(Long chessRoomId) {
+        chessGame.initializeData(chessRoomId);
+        chessGame.loadData(chessRoomId);
     }
 
-    private void processLoadCommand() {
-        chessGame.loadData();
+    private void processLoadCommand(Long chessRoomId) {
+        chessGame.loadData(chessRoomId);
     }
 
     private void processMoveCommand(Command command) {
@@ -88,9 +88,9 @@ public class ChessGameController {
         OutputView.printWinnerTeam(scores.get(Team.BLACK), scores.get(Team.WHITE));
     }
 
-    private void processSaveCommand() {
-        chessGame.deleteData();
-        chessGame.saveData();
+    private void processSaveCommand(Long chessRoomId) {
+        chessGame.deleteData(chessRoomId);
+        chessGame.saveData(chessRoomId);
     }
 
     private BoardPrintDto makeBoardDto(Map<Position, Piece> board) {

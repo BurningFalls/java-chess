@@ -12,15 +12,14 @@ import org.junit.jupiter.api.Test;
 public class ChessServiceTest {
     private static final long CHESS_ROOM_ID = 1;
 
-    private final ChessService chessService =
-            new ChessService(CHESS_ROOM_ID, new FakePieceDao(), new FakeChessRoomDao());
+    private final ChessService chessService = ChessService.getInstance(new FakePieceDao(), new FakeChessRoomDao());
 
     @DisplayName("체스 게임을 초기화하면, 처음 턴은 WHITE이다.")
     @Test
     void initializeChessAndLoadTurnTest() {
-        chessService.initializeChess();
+        chessService.initializeChess(CHESS_ROOM_ID);
 
-        Team actualTurn = chessService.loadTurn();
+        Team actualTurn = chessService.loadTurn(CHESS_ROOM_ID);
         Team expectedTurn = Team.WHITE;
 
         Assertions.assertThat(actualTurn).isEqualTo(expectedTurn);
@@ -29,8 +28,8 @@ public class ChessServiceTest {
     @DisplayName("체스 게임을 초기화한 뒤, 불러온 모든 말들의 점수 합계는 38점이다.")
     @Test
     void initializeChessAndLoadPiecesTest() {
-        chessService.initializeChess();
-        Board board = chessService.loadPieces();
+        chessService.initializeChess(CHESS_ROOM_ID);
+        Board board = chessService.loadPieces(CHESS_ROOM_ID);
 
         double actualScore = board.calculatePiecesScoreSum(Team.WHITE);
         double expectedScore = 38;

@@ -10,8 +10,8 @@ public class Application {
         OutputView.printChessGameStartMessage();
         OutputView.printCommandGuideMessage();
 
-        ChessGameController chessGameController = new ChessGameController(CHESS_ROOM_ID);
+        ChessGameController chessGameController = new ChessGameController();
 
-        chessGameController.startGame();
+        chessGameController.startGame(CHESS_ROOM_ID);
     }
 }
