@@ -13,8 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ChessGame {
-    private static final String DATABASE_NAME = "chess";
-    private static final Connection connection = DatabaseConnection.getConnection(DATABASE_NAME);
+    private static final Connection connection = DatabaseConnection.getConnection("chess");
 
     private final ChessService chessService;
     private Board board;
