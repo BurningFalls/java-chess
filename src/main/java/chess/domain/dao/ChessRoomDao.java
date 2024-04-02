@@ -1,13 +1,14 @@
 package chess.domain.dao;
 
 import chess.domain.dto.ChessRoomDto;
+import java.sql.Connection;
 
 public interface ChessRoomDao {
-    void addChessRoom(ChessRoomDto chessRoomDto);
+    void addChessRoom(Connection connection, ChessRoomDto chessRoomDto);
 
-    void updateTurnById(String turn, long id);
+    void updateTurnById(Connection connection, String turn, long id);
 
-    String findTurnById(long id);
+    String findTurnById(Connection connection, long id);
 
-    void deleteChessRoomById(long id);
+    void deleteChessRoomById(Connection connection, long id);
 }

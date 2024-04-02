@@ -8,14 +8,8 @@ import java.util.NoSuchElementException;
 public class MysqlChessRoomDao implements ChessRoomDao {
     private static final String TABLE_NAME = "chess_room";
 
-    private final Connection connection;
-
-    public MysqlChessRoomDao(Connection connection) {
-        this.connection = connection;
-    }
-
     @Override
-    public void addChessRoom(ChessRoomDto chessRoomDto) {
+    public void addChessRoom(Connection connection, ChessRoomDto chessRoomDto) {
         final var query = "INSERT INTO " + TABLE_NAME + " (id, turn) VALUES(?, ?)";
         try (var statement = connection.prepareStatement(query)) {
             statement.setLong(1, chessRoomDto.id());
@@ -27,7 +21,7 @@ public class MysqlChessRoomDao implements ChessRoomDao {
     }
 
     @Override
-    public void updateTurnById(String turn, long id) {
+    public void updateTurnById(Connection connection, String turn, long id) {
         final var query = "UPDATE " + TABLE_NAME + " SET turn=? WHERE id=?";
         try (var statement = connection.prepareStatement(query)) {
             statement.setString(1, turn);
@@ -39,7 +33,7 @@ public class MysqlChessRoomDao implements ChessRoomDao {
     }
 
     @Override
-    public String findTurnById(long id) {
+    public String findTurnById(Connection connection, long id) {
         final var query = "SELECT * FROM " + TABLE_NAME + " WHERE id=?";
         try (var statement = connection.prepareStatement(query)) {
             statement.setLong(1, id);
@@ -55,7 +49,7 @@ public class MysqlChessRoomDao implements ChessRoomDao {
     }
 
     @Override
-    public void deleteChessRoomById(long id) {
+    public void deleteChessRoomById(Connection connection, long id) {
         final var query = "DELETE FROM " + TABLE_NAME + " where id=?";
         try (var statement = connection.prepareStatement(query)) {
             statement.setLong(1, id);

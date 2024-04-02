@@ -12,6 +12,7 @@ import chess.domain.pieceinfo.Position;
 import chess.domain.pieceinfo.Team;
 import chess.view.InputView;
 import chess.view.OutputView;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,54 +28,54 @@ public class ChessGameController {
         this.chessGame = new ChessGame();
     }
 
-    public void startGame(Long chessRoomId) {
+    public void startGame(Connection connection, Long chessRoomId) {
         while (!commandLogger.isCommandEnd() && chessGame.isNotFinish()) {
-            playGame(chessRoomId);
+            playGame(connection, chessRoomId);
         }
     }
 
-    private void playGame(Long chessRoomId) {
+    private void playGame(Connection connection, Long chessRoomId) {
         try {
-            play(chessRoomId);
+            play(connection, chessRoomId);
         } catch (IllegalArgumentException | NoSuchElementException e) {
             OutputView.printErrorMessage(e.getMessage());
         }
     }
 
-    private void play(Long chessRoomId) {
+    private void play(Connection connection, Long chessRoomId) {
         if (commandLogger.isGameStart()) {
             OutputView.printWhoTurn(chessGame.getRawTurn());
         }
         Command command = Command.from(InputView.inputCommand());
         commandLogger.checkCommandValidate(command);
 
-        playWithCommand(command, chessRoomId);
+        playWithCommand(connection, command, chessRoomId);
 
         commandLogger.addLog(command);
         OutputView.printBoard(makeBoardDto(chessGame.getRawBoard()));
     }
 
-    private void playWithCommand(Command command, Long chessRoomId) {
+    private void playWithCommand(Connection connection, Command command, Long chessRoomId) {
         if (command.isTypeEqualTo(CommandType.START)) {
-            processStartCommand(chessRoomId);
+            processStartCommand(connection, chessRoomId);
         } else if (command.isTypeEqualTo(CommandType.LOAD)) {
-            processLoadCommand(chessRoomId);
+            processLoadCommand(connection, chessRoomId);
         } else if (command.isTypeEqualTo(CommandType.MOVE)) {
             processMoveCommand(command);
         } else if (command.isTypeEqualTo(CommandType.STATUS)) {
             processStatusCommand();
         } else if (command.isTypeEqualTo(CommandType.SAVE)) {
-            processSaveCommand(chessRoomId);
+            processSaveCommand(connection, chessRoomId);
         }
     }
 
-    private void processStartCommand(Long chessRoomId) {
-        chessGame.initializeData(chessRoomId);
-        chessGame.loadData(chessRoomId);
+    private void processStartCommand(Connection connection, Long chessRoomId) {
+        chessGame.initializeData(connection, chessRoomId);
+        chessGame.loadData(connection, chessRoomId);
     }
 
-    private void processLoadCommand(Long chessRoomId) {
-        chessGame.loadData(chessRoomId);
+    private void processLoadCommand(Connection connection, Long chessRoomId) {
+        chessGame.loadData(connection, chessRoomId);
     }
 
     private void processMoveCommand(Command command) {
@@ -88,9 +89,9 @@ public class ChessGameController {
         OutputView.printWinnerTeam(scores.get(Team.BLACK), scores.get(Team.WHITE));
     }
 
-    private void processSaveCommand(Long chessRoomId) {
-        chessGame.deleteData(chessRoomId);
-        chessGame.saveData(chessRoomId);
+    private void processSaveCommand(Connection connection, Long chessRoomId) {
+        chessGame.deleteData(connection, chessRoomId);
+        chessGame.saveData(connection, chessRoomId);
     }
 
     private BoardPrintDto makeBoardDto(Map<Position, Piece> board) {

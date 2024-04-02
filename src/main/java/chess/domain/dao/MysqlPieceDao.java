@@ -10,14 +10,8 @@ import java.util.NoSuchElementException;
 public class MysqlPieceDao implements PieceDao {
     private static final String TABLE_NAME = "piece";
 
-    private final Connection connection;
-
-    public MysqlPieceDao(Connection connection) {
-        this.connection = connection;
-    }
-
     @Override
-    public void addPieceByChessRoomId(PieceDto pieceDto, Long chess_room_id) {
+    public void addPieceByChessRoomId(Connection connection, PieceDto pieceDto, Long chess_room_id) {
         final var query =
                 "INSERT IGNORE INTO " + TABLE_NAME + " (chess_room_id, position, type, team) VALUES(?, ?, ?, ?)";
         try (var statement = connection.prepareStatement(query)) {
@@ -32,7 +26,7 @@ public class MysqlPieceDao implements PieceDao {
     }
 
     @Override
-    public List<PieceDto> findAllByChessRoomId(Long chess_room_id) {
+    public List<PieceDto> findAllByChessRoomId(Connection connection, Long chess_room_id) {
         final var query = "SELECT * FROM " + TABLE_NAME + " where chess_room_id=?";
         try (var statement = connection.prepareStatement(query)) {
             statement.setLong(1, chess_room_id);
@@ -59,7 +53,7 @@ public class MysqlPieceDao implements PieceDao {
     }
 
     @Override
-    public void deleteAllByChessRoomId(Long chess_room_id) {
+    public void deleteAllByChessRoomId(Connection connection, Long chess_room_id) {
         final var query = "DELETE FROM " + TABLE_NAME + " where chess_room_id=?";
         try (var statement = connection.prepareStatement(query)) {
             statement.setLong(1, chess_room_id);

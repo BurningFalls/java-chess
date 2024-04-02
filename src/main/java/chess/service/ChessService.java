@@ -15,6 +15,7 @@ import chess.domain.pieceinfo.Position;
 import chess.domain.pieceinfo.Team;
 import chess.domain.strategy.EmptyMoveStrategy;
 import chess.domain.strategy.MoveStrategy;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,16 +41,16 @@ public class ChessService {
         return instance;
     }
 
-    public void initializeChess(Long chessRoomId) {
-        pieceDao.deleteAllByChessRoomId(chessRoomId);
-        chessRoomDao.deleteChessRoomById(chessRoomId);
+    public void initializeChess(Connection connection, Long chessRoomId) {
+        pieceDao.deleteAllByChessRoomId(connection, chessRoomId);
+        chessRoomDao.deleteChessRoomById(connection, chessRoomId);
 
-        BoardInitializer.initialize(pieceDao, chessRoomId);
-        ChessRoomInitializer.initialize(chessRoomDao, chessRoomId);
+        BoardInitializer.initialize(connection, pieceDao, chessRoomId);
+        ChessRoomInitializer.initialize(connection, chessRoomDao, chessRoomId);
     }
 
-    public Board loadPieces(Long chessRoomId) {
-        List<PieceDto> pieceDtos = pieceDao.findAllByChessRoomId(chessRoomId);
+    public Board loadPieces(Connection connection, Long chessRoomId) {
+        List<PieceDto> pieceDtos = pieceDao.findAllByChessRoomId(connection, chessRoomId);
 
         Map<Position, Piece> pieces = new HashMap<>();
         for (PieceDto pieceDto : pieceDtos) {
@@ -63,8 +64,8 @@ public class ChessService {
         return new Board(pieces);
     }
 
-    public Team loadTurn(Long chessRoomId) {
-        String turn = chessRoomDao.findTurnById(chessRoomId);
+    public Team loadTurn(Connection connection, Long chessRoomId) {
+        String turn = chessRoomDao.findTurnById(connection, chessRoomId);
         return Team.valueOf(turn);
     }
 
@@ -84,20 +85,21 @@ public class ChessService {
         return positions;
     }
 
-    public void savePieces(Board board, Long chessRoomId) {
+    public void savePieces(Connection connection, Board board, Long chessRoomId) {
         Map<Position, Piece> pieces = board.getBoard();
 
         pieces.values().stream()
                 .filter(piece -> piece.getType() != PieceType.EMPTY)
-                .forEach(piece -> pieceDao.addPieceByChessRoomId(changePieceToPieceDto(piece), chessRoomId));
+                .forEach(
+                        piece -> pieceDao.addPieceByChessRoomId(connection, changePieceToPieceDto(piece), chessRoomId));
     }
 
-    public void deletePieces(Long chessRoomId) {
-        pieceDao.deleteAllByChessRoomId(chessRoomId);
+    public void deletePieces(Connection connection, Long chessRoomId) {
+        pieceDao.deleteAllByChessRoomId(connection, chessRoomId);
     }
 
-    public void saveTurn(Team turn, Long chessRoomId) {
-        chessRoomDao.updateTurnById(turn.getRawTeam(), chessRoomId);
+    public void saveTurn(Connection connection, Team turn, Long chessRoomId) {
+        chessRoomDao.updateTurnById(connection, turn.getRawTeam(), chessRoomId);
     }
 
     private PieceDto changePieceToPieceDto(Piece piece) {
