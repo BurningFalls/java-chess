@@ -51,8 +51,7 @@ public class ChessGame {
     }
 
     public void saveData(Connection connection, Long chessRoomId) {
-        chessService.savePieces(connection, board, chessRoomId);
-        chessService.saveTurn(connection, turn, chessRoomId);
+        chessService.savePiecesAndTurn(connection, board, turn, chessRoomId);
     }
 
     public void deleteData(Connection connection, Long chessRoomId) {

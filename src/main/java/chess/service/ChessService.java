@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ChessService {
+public class ChessService extends TransactionalService {
     private static ChessService instance;
     private static final int BOARD_SIZE = 8;
     private static final MoveStrategy EMPTY_MOVE_STRATEGY = new EmptyMoveStrategy();
@@ -42,11 +42,13 @@ public class ChessService {
     }
 
     public void initializeChess(Connection connection, Long chessRoomId) {
-        pieceDao.deleteAllByChessRoomId(connection, chessRoomId);
-        chessRoomDao.deleteChessRoomById(connection, chessRoomId);
+        executeInTransaction(connection, () -> {
+            pieceDao.deleteAllByChessRoomId(connection, chessRoomId);
+            chessRoomDao.deleteChessRoomById(connection, chessRoomId);
 
-        BoardInitializer.initialize(connection, pieceDao, chessRoomId);
-        ChessRoomInitializer.initialize(connection, chessRoomDao, chessRoomId);
+            BoardInitializer.initialize(connection, pieceDao, chessRoomId);
+            ChessRoomInitializer.initialize(connection, chessRoomDao, chessRoomId);
+        });
     }
 
     public Board loadPieces(Connection connection, Long chessRoomId) {
@@ -85,7 +87,14 @@ public class ChessService {
         return positions;
     }
 
-    public void savePieces(Connection connection, Board board, Long chessRoomId) {
+    public void savePiecesAndTurn(Connection connection, Board board, Team turn, Long chessRoomId) {
+        executeInTransaction(connection, () -> {
+            savePieces(connection, board, chessRoomId);
+            saveTurn(connection, turn, chessRoomId);
+        });
+    }
+
+    private void savePieces(Connection connection, Board board, Long chessRoomId) {
         Map<Position, Piece> pieces = board.getBoard();
 
         pieces.values().stream()
@@ -94,12 +103,12 @@ public class ChessService {
                         piece -> pieceDao.addPieceByChessRoomId(connection, changePieceToPieceDto(piece), chessRoomId));
     }
 
-    public void deletePieces(Connection connection, Long chessRoomId) {
-        pieceDao.deleteAllByChessRoomId(connection, chessRoomId);
+    private void saveTurn(Connection connection, Team turn, Long chessRoomId) {
+        chessRoomDao.updateTurnById(connection, turn.getRawTeam(), chessRoomId);
     }
 
-    public void saveTurn(Connection connection, Team turn, Long chessRoomId) {
-        chessRoomDao.updateTurnById(connection, turn.getRawTeam(), chessRoomId);
+    public void deletePieces(Connection connection, Long chessRoomId) {
+        pieceDao.deleteAllByChessRoomId(connection, chessRoomId);
     }
 
     private PieceDto changePieceToPieceDto(Piece piece) {
